@@ -1,24 +1,23 @@
 package main
 
 import (
-    "fmt"
-    "os"
+	"log"
 
-    "microbro/applogic"
+	"microbro/applogic"
 )
 
 func main() {
 
-    fmt.Println("Initializing microbro Api")
+	log.Println("Initializing microbro Api")
 
-    // Grab API_PORT from environment variables
-    // If not set, use default port 8080
-    apiPort := os.Getenv("API_PORT")
-    if apiPort == "" {
-        apiPort = "8080"
-    }
-    api := applogic.DefaultAPIClient()
-    fmt.Println("Micro bro is running on \n" + api.BaseUrl + ":" + api.Port)
-    applogic.RunDefaultClient(api, apiPort)
+	api := applogic.DefaultAPIClient()
+	// Grab API_PORT from environment variables
+	// If not set, use default port 9090
+	// apiPort := os.Getenv("API_PORT")
+	// if apiPort == "" {
+	// 	apiPort = ":9090"
+	// }
+	apiPort := ":9090"
+	applogic.RunDefaultClient(api, apiPort)
 
 }
