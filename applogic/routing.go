@@ -13,7 +13,7 @@ func InitRouter(api *Api) *mux.Router {
 // InitRoutes setup all handlers routing
 func InitRoutes(api *Api) {
 	router := api.Router
-	router.HandleFunc("/", HomeHandler)
+	router.HandleFunc("/", HomeLander)
 	router.HandleFunc("/info", InfoHandler)
 	//http.HandleFunc("/add", AddHandler)
 	//http.HandleFunc("/delete", DeleteHandler)
