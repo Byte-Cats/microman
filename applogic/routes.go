@@ -1,28 +1,27 @@
 package applogic
 
 import (
-    "github.com/gorilla/mux"
+	"github.com/gorilla/mux"
 )
 
 // InitRouter initializes the router for the api client
-func InitRouter(api *Api) {
-    api.Router = mux.NewRouter().StrictSlash(true)
-    InitRoutes(api)
+func InitRouter(api *Api) *mux.Router {
+	api.Router = mux.NewRouter().StrictSlash(true)
+	return api.Router
 }
 
-// InitRoutes setup all routing
+// InitRoutes setup all handlers routing
 func InitRoutes(api *Api) {
-    router := api.Router
-    router.HandleFunc("/", HomeHandler)
-    router.HandleFunc("/info", InfoHandler)
-    api.Router = router
-    //http.HandleFunc("/add", AddHandler)
-    //http.HandleFunc("/delete", DeleteHandler)
-    //http.HandleFunc("/edit", EditHandler)
+	router := api.Router
+	router.HandleFunc("/", HomeHandler)
+	router.HandleFunc("/info", InfoHandler)
+	//http.HandleFunc("/add", AddHandler)
+	//http.HandleFunc("/delete", DeleteHandler)
+	//http.HandleFunc("/edit", EditHandler)
 }
 
 // InitDefaultRouter for api instance
 func InitDefaultRouter(api *Api) {
-    InitRouter(api)
-    InitRoutes(api)
+	InitRouter(api)
+	InitRoutes(api)
 }

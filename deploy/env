@@ -1,6 +1,7 @@
 # App Settings
-API_PORT= 8080 # the port the api will run on
-API_HOST= "localhost" # the host the api will run on
+API_NAME="MICRO_API" # the name of the api
+API_PORT=9090 # the port the api will run on
+API_HOST="localhost" # the host the api will run on
 API_MARK="v1" # the version of the api
 
 
