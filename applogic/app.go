@@ -21,7 +21,7 @@ type Api struct {
 func DefaultAPIClient() *Api {
 	api := new(Api)
 	api.Title = "My API"
-	api.Version = "1.0.0"
+	api.Version = "0.3.0"
 	api.BaseUrl = "http://localhost"
 	api.Port = ":9090"
 	InitDefaultRouter(api)

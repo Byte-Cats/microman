@@ -1,4 +1,4 @@
-package applogic
+package handlers
 
 import (
 	"fmt"
@@ -6,14 +6,14 @@ import (
 	"net/http"
 )
 
-// Home page output
-func Home() string {
+// HomeSecrets the secrets of the home page to be displayed
+func HomeSecrets() string {
 	return "\tWelcome to the home sweet home!!!\nThis beautiful microservice app keeps growing with the \"Byte Cats\" company!\nAnd you can be one of us! It depends on you and your desire to be a cool programmer!"
 }
 
-// HomeLander for the home page
-func HomeLander(w http.ResponseWriter, r *http.Request) {
+// Home there's no place like it apparently
+func Home(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(200)
-	fmt.Fprintf(w, Home())
+	fmt.Fprintf(w, HomeSecrets())
 	log.Printf("Handling a request with method \"%v\" on a url = \"%v\"", r.Method, r.RequestURI)
 }

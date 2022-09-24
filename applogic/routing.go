@@ -1,6 +1,8 @@
 package applogic
 
 import (
+	"microbro/handlers"
+
 	"github.com/gorilla/mux"
 )
 
@@ -13,8 +15,8 @@ func InitRouter(api *Api) *mux.Router {
 // InitRoutes setup all handlers routing
 func InitRoutes(api *Api) {
 	router := api.Router
-	router.HandleFunc("/", HomeLander)
-	router.HandleFunc("/info", InfoHandler)
+	router.HandleFunc("/", handlers.Home)
+	router.HandleFunc("/info", handlers.InfoDealer)
 	//http.HandleFunc("/add", AddHandler)
 	//http.HandleFunc("/delete", DeleteHandler)
 	//http.HandleFunc("/edit", EditHandler)
