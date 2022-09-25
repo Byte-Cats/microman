@@ -18,6 +18,7 @@ type Settings struct {
 	Version string
 }
 
+// Template is a struct that holds the default settings of the Api
 type Template struct {
 	// Default title of the api instance
 	Title string
@@ -95,7 +96,7 @@ func GetPort(api *Api) string {
 	return api.Settings.Port
 }
 
-// GetRouter is a function that returns the router of the Api
+// ShowPort is a function that returns the router of the Api
 func ShowPort(api *Api) {
 	println(api.Settings.Port)
 }
