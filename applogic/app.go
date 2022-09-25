@@ -3,37 +3,33 @@ package applogic
 import (
 	"log"
 	"net/http"
-
-	"github.com/gorilla/mux"
 )
 
 // Api is the container for all app properties
 type Api struct {
-	Title   string
-	Version string
-	BaseUrl string
-	Port    string
-	Router  *mux.Router
-	ServeUp *http.ServeMux
+	Settings Settings
+	Served   Served
 }
 
 // DefaultAPIClient is the default client for the API without config
 func DefaultAPIClient() *Api {
 	api := new(Api)
-	api.Title = "My API"
-	api.Version = "0.3.0"
-	api.BaseUrl = "http://localhost"
-	api.Port = ":9090"
+	CheckSettings(api)
+	//api.Settings.Title = "Name of the app"
+	//api.Settings.Version = "0.3.0"
+	//api.Settings.Hostname = "http://localhost"
+	//api.Settings.Port = ":9090"
+
 	InitDefaultRouter(api)
 	ServerSetup(api)
 
 	return api
 }
 
-// The main part of app that takes needed info from Api config and is starting a server
-func RunDefaultClient(api *Api, port string) {
-	log.Printf("Server is starting on port %v", port)
-	err := http.ListenAndServe(port, api.Router)
+// RunDefaultClient uses required info from Api and is starting a server
+func RunDefaultClient(api *Api) {
+	log.Printf("Server is starting on port %v", api.Settings.Port)
+	err := http.ListenAndServe(api.Settings.Port, api.Served.Router)
 	if err != nil {
 		log.Printf("Can't start a server\n\"%v\"", err)
 	}

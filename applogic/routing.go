@@ -8,13 +8,13 @@ import (
 
 // InitRouter initializes the router for the api client
 func InitRouter(api *Api) *mux.Router {
-	api.Router = mux.NewRouter().StrictSlash(true)
-	return api.Router
+	api.Served.Router = mux.NewRouter().StrictSlash(true)
+	return api.Served.Router
 }
 
 // InitRoutes setup all handlers routing
 func InitRoutes(api *Api) {
-	router := api.Router
+	router := api.Served.Router
 	router.HandleFunc("/", handlers.Home)
 	router.HandleFunc("/info", handlers.InfoDealer)
 	//http.HandleFunc("/add", AddHandler)

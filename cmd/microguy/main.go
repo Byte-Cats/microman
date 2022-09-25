@@ -9,5 +9,5 @@ import (
 func main() {
 	log.Println("Initializing micro bruh Api")
 	api := applogic.DefaultAPIClient()
-	applogic.RunDefaultClient(api, api.Port)
+	applogic.RunDefaultClient(api)
 }
