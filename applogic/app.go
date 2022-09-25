@@ -15,8 +15,6 @@ type Api struct {
 func DefaultAPIClient() *Api {
 	api := new(Api)
 	CheckSettings(api)
-	api.Settings.Port = ":9090"
-
 	InitDefaultRouter(api)
 	ServerSetup(api)
 
@@ -26,7 +24,7 @@ func DefaultAPIClient() *Api {
 // RunDefaultClient uses required info from Api and is starting a server
 func RunDefaultClient(api *Api) {
 	log.Printf("Server is starting on port %v", api.Settings.Port)
-	err := http.ListenAndServe(api.Settings.Port, api.Served.Router)
+	err := http.ListenAndServe(GetRnP(api))
 	if err != nil {
 		log.Printf("Can't start a server\n\"%v\"", err)
 	}

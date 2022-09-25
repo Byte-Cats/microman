@@ -14,6 +14,9 @@ func HomeSecrets() string {
 // Home there's no place like it apparently
 func Home(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(200)
-	fmt.Fprintf(w, HomeSecrets())
+	_, err := fmt.Fprintf(w, HomeSecrets())
+	if err != nil {
+		return
+	}
 	log.Printf("Handling a request with method \"%v\" on a url = \"%v\"", r.Method, r.RequestURI)
 }

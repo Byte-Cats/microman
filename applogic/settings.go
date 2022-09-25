@@ -2,6 +2,8 @@ package applogic
 
 import (
 	"os"
+
+	"github.com/gorilla/mux"
 )
 
 // Settigns is a struct that holds the settings for the micro bruh Api
@@ -56,10 +58,10 @@ type Template struct {
 
 func DefaultTemplate() Template {
 	return Template{
-		Title:    "Micro bruh Api",
+		Title:    "Micro Dude Api",
 		Hostname: "localhost",
-		Port:     "8080",
-		Version:  "1.0.0",
+		Port:     "6969",
+		Version:  "0.4.0",
 	}
 }
 func CheckSettings(api *Api) {
@@ -74,7 +76,7 @@ func SetPort(api *Api, port string) {
 func GetPort(api *Api) string {
 	return api.Settings.Port
 }
-func ShowApiPort(api *Api) {
+func ShowPort(api *Api) {
 	println(api.Settings.Port)
 }
 func SetTitle(api *Api, title string) {
@@ -83,7 +85,7 @@ func SetTitle(api *Api, title string) {
 func GetTitle(api *Api) string {
 	return api.Settings.Title
 }
-func ShowApiTitle(api *Api) {
+func ShowTitle(api *Api) {
 	println(api.Settings.Title)
 }
 func SetHostname(api *Api, hostname string) {
@@ -106,4 +108,10 @@ func ShowVersion(api *Api) {
 }
 func GetSettings(api *Api) Settings {
 	return api.Settings
+}
+func GetFullPath(api *Api) string {
+	return GetHostname(api) + ":" + GetPort(api)
+}
+func GetRnP(api *Api) (string, *mux.Router) {
+	return ":" + GetPort(api), GetRouter(api)
 }

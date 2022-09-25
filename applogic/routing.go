@@ -27,3 +27,6 @@ func InitDefaultRouter(api *Api) {
 	InitRouter(api)
 	InitRoutes(api)
 }
+func GetRouter(api *Api) *mux.Router {
+	return api.Served.Router
+}
