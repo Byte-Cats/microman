@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	log.Println("Initializing micro bruh Api")
 	api := applogic.DefaultAPIClient()
+	log.Println("Initializing " + applogic.GetTitle(api) + "...")
 	applogic.RunDefaultClient(api)
 }
