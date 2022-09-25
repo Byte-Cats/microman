@@ -14,42 +14,96 @@ type Settings struct {
 	Version string
 }
 
-func CheckTitle(api *Api) {
+func CheckTitle(api *Api, template string) {
 	// Check the variables from env and set them to the settings
 	// if they are not set, set them to the default values
 	// get title from env
 	api.Settings.Title = os.Getenv("TITLE")
 	if api.Settings.Title == "" {
-		api.Settings.Title = "Micro bruh Api"
+		api.Settings.Title = template
 	}
 }
 
-func CheckHostname(api *Api) {
+func CheckHostname(api *Api, template string) {
 	// Check the variables from env and set them to the settings
 	// if they are not set, set them to the default values
 	// get hostname from env
 	api.Settings.Hostname = os.Getenv("HOSTNAME")
 	if api.Settings.Hostname == "" {
-		api.Settings.Hostname = "localhost"
+		api.Settings.Hostname = template
 	}
 }
 
-func CheckPort(api *Api) {
+func CheckPort(api *Api, template string) {
 	api.Settings.Port = os.Getenv("PORT")
 	if api.Settings.Port == "" {
-		api.Settings.Port = "8080"
+		api.Settings.Port = template
 	}
 }
-func CheckVersion(api *Api) {
+func CheckVersion(api *Api, template string) {
 	api.Settings.Version = os.Getenv("VERSION")
 	if api.Settings.Version == "" {
-		api.Settings.Version = "0.3.0"
+		api.Settings.Version = template
 	}
 }
 
+type Template struct {
+	Title    string
+	Hostname string
+	Port     string
+	Version  string
+}
+
+func DefaultTemplate() Template {
+	return Template{
+		Title:    "Micro bruh Api",
+		Hostname: "localhost",
+		Port:     "8080",
+		Version:  "1.0.0",
+	}
+}
 func CheckSettings(api *Api) {
-	CheckTitle(api)
-	CheckHostname(api)
-	CheckPort(api)
-	CheckVersion(api)
+	CheckTitle(api, DefaultTemplate().Title)
+	CheckHostname(api, DefaultTemplate().Hostname)
+	CheckPort(api, DefaultTemplate().Port)
+	CheckVersion(api, DefaultTemplate().Version)
+}
+func SetPort(api *Api, port string) {
+	api.Settings.Port = port
+}
+func GetPort(api *Api) string {
+	return api.Settings.Port
+}
+func ShowApiPort(api *Api) {
+	println(api.Settings.Port)
+}
+func SetTitle(api *Api, title string) {
+	api.Settings.Title = title
+}
+func GetTitle(api *Api) string {
+	return api.Settings.Title
+}
+func ShowApiTitle(api *Api) {
+	println(api.Settings.Title)
+}
+func SetHostname(api *Api, hostname string) {
+	api.Settings.Hostname = hostname
+}
+func GetHostname(api *Api) string {
+	return api.Settings.Hostname
+}
+func ShowHostname(api *Api) {
+	println(api.Settings.Hostname)
+}
+func SetVersion(api *Api, version string) {
+	api.Settings.Version = version
+}
+func GetVersion(api *Api) string {
+	return api.Settings.Version
+}
+func ShowVersion(api *Api) {
+	println(api.Settings.Version)
+}
+func GetSettings(api *Api) Settings {
+	return api.Settings
 }

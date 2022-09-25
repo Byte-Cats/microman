@@ -15,10 +15,7 @@ type Api struct {
 func DefaultAPIClient() *Api {
 	api := new(Api)
 	CheckSettings(api)
-	//api.Settings.Title = "Name of the app"
-	//api.Settings.Version = "0.3.0"
-	//api.Settings.Hostname = "http://localhost"
-	//api.Settings.Port = ":9090"
+	api.Settings.Port = ":9090"
 
 	InitDefaultRouter(api)
 	ServerSetup(api)
