@@ -10,7 +10,7 @@ Minimal Go Api Starter Kit without frameworks
 - [ ] JWT Ready
 - [ ] Authentication
 - [ ] Example Database Use
-- [ ] Pog Build Scripts
+- [ ] Poggy Build Scripts
 - [ ] Docker
 - [ ] Kubernetes
 - [ ] Jenkins
