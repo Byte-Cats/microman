@@ -9,3 +9,6 @@ Minimal Go Api Starter Kit without frameworks
 - [ ] Example Database Use
 - [ ] Pog Build Scripts
 - [ ] Docker
+- [ ] Kubernetes
+- [ ] Jenkins
+- [ ] Terraform
