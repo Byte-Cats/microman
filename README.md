@@ -5,6 +5,7 @@ Minimal Go Api Starter Kit without frameworks
 - [x] Api Object
 - [x] Basic Settings
 - [x] Simple FS
+- [x] Heavily Commentated
 - [x] Example Routes
 - [ ] Example Database Use
 - [ ] Pog Build Scripts
