@@ -1,6 +1,7 @@
 package applogic
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/gorilla/mux"
@@ -16,6 +17,8 @@ type Settings struct {
 	Port string
 	// Version of the Api
 	Version string
+	// Value of Prefix
+	Prefix string
 }
 
 // Template is a struct that holds the default settings of the Api
@@ -28,6 +31,8 @@ type Template struct {
 	Port string
 	// Default version of the Api
 	Version string
+	// Default value of prefix
+	Prefix string
 }
 
 // DefaultTemplate is the default template of the Api settings
@@ -37,6 +42,7 @@ func DefaultTemplate() Template {
 		Hostname: "localhost",
 		Port:     "6969",
 		Version:  "0.420.69",
+		Prefix:   "default",
 	}
 }
 
@@ -78,12 +84,21 @@ func CheckVersion(api *Api, template string) {
 	}
 }
 
+// CheckPrefix is a function that checks if the prefix is set from .env
+func CheckPrefix(api *Api, template string) {
+	api.Settings.Prefix = os.Getenv("PREFIX")
+	if api.Settings.Prefix == "" {
+		api.Settings.Prefix = template
+	}
+}
+
 // CheckSettings is a function that checks if the settings are set from .env
 func CheckSettings(api *Api) {
 	CheckTitle(api, DefaultTemplate().Title)
 	CheckHostname(api, DefaultTemplate().Hostname)
 	CheckPort(api, DefaultTemplate().Port)
 	CheckVersion(api, DefaultTemplate().Version)
+	CheckPrefix(api, DefaultTemplate().Prefix)
 }
 
 // SetPort is a function that sets the port of the Api
@@ -98,7 +113,7 @@ func GetPort(api *Api) string {
 
 // ShowPort is a function that returns the router of the Api
 func ShowPort(api *Api) {
-	println(api.Settings.Port)
+	fmt.Println(api.Settings.Port)
 }
 
 // SetTitle is a function that sets the title of the Api
@@ -113,7 +128,7 @@ func GetTitle(api *Api) string {
 
 // ShowTitle is a function that prints the title of the Api
 func ShowTitle(api *Api) {
-	println(api.Settings.Title)
+	fmt.Println(api.Settings.Title)
 }
 
 // SetHostname is a function that sets the hostname of the Api
@@ -128,7 +143,7 @@ func GetHostname(api *Api) string {
 
 // ShowHostname is a function that prints the hostname of the Api
 func ShowHostname(api *Api) {
-	println(api.Settings.Hostname)
+	fmt.Println(api.Settings.Hostname)
 }
 
 // SetVersion is a function that sets the version of the Api
@@ -143,7 +158,22 @@ func GetVersion(api *Api) string {
 
 // ShowVersion is a function that prints the version of the Api
 func ShowVersion(api *Api) {
-	println(api.Settings.Version)
+	fmt.Println(api.Settings.Version)
+}
+
+// SetPrefix is a function that sets the url prefix of the Api
+func SetPrefix(api *Api, prefix string) {
+	api.Settings.Prefix = prefix
+}
+
+// GetPrefix is a function that returns the url prefix of the Api
+func GetPrefix(api *Api) string {
+	return api.Settings.Prefix
+}
+
+// ShowPrefix is a function that prints the url prefix of the Api
+func ShowPrefix(api *Api) {
+	fmt.Println(api.Settings.Prefix)
 }
 
 // GetSettings is a function that returns the settings of the Api
