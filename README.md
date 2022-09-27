@@ -8,11 +8,15 @@ Minimal Go Api Starter Kit without frameworks
 - [x] Heavily Commentated
 - [x] Example Routes
 - [x] Subrouting
-- [ ] JWT Ready
-- [ ] Authentication
 - [ ] Example Database Use
+- [ ] JWT Ready
+- [ ] Users
+- [ ] Authentication
 - [ ] Poggy Build Scripts
+
+### Integration
 - [ ] Docker
 - [ ] Kubernetes
 - [ ] Jenkins
+- [ ] Travis.ci
 - [ ] Terraform
