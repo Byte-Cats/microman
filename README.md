@@ -13,6 +13,8 @@ Minimal Go Api Starter Kit without frameworks
 - [ ] Users
 - [ ] Authentication
 - [ ] Poggy Build Scripts
+
+### Integration
 - [ ] Docker
 - [ ] Kubernetes
 - [ ] Jenkins
