@@ -101,8 +101,8 @@ func CheckSettings(api *Api) {
 	CheckPrefix(api, DefaultTemplate().Prefix)
 }
 
-// SetPort is a function that sets the port of the Api
-func SetPort(api *Api, port string) {
+// SetPort is a pointer receiver function that sets the port of the Api
+func (api *Api) SetPort(port string) {
 	api.Settings.Port = port
 }
 
@@ -116,8 +116,8 @@ func ShowPort(api *Api) {
 	fmt.Println(api.Settings.Port)
 }
 
-// SetTitle is a function that sets the title of the Api
-func SetTitle(api *Api, title string) {
+// SetTitle is a pointer receiver function that sets the title of the Api
+func (api *Api) SetTitle(title string) {
 	api.Settings.Title = title
 }
 
@@ -131,8 +131,8 @@ func ShowTitle(api *Api) {
 	fmt.Println(api.Settings.Title)
 }
 
-// SetHostname is a function that sets the hostname of the Api
-func SetHostname(api *Api, hostname string) {
+// SetHostname is a pointer receiver function that sets the hostname of the Api
+func (api *Api) SetHostname(hostname string) {
 	api.Settings.Hostname = hostname
 }
 
@@ -146,8 +146,8 @@ func ShowHostname(api *Api) {
 	fmt.Println(api.Settings.Hostname)
 }
 
-// SetVersion is a function that sets the version of the Api
-func SetVersion(api *Api, version string) {
+// SetVersion is a pointer receiver function that sets the version of the Api
+func (api *Api) SetVersion(version string) {
 	api.Settings.Version = version
 }
 
@@ -161,8 +161,8 @@ func ShowVersion(api *Api) {
 	fmt.Println(api.Settings.Version)
 }
 
-// SetPrefix is a function that sets the url prefix of the Api
-func SetPrefix(api *Api, prefix string) {
+// SetPrefix is a pointer receiver function that sets the url prefix of the Api
+func (api *Api) SetPrefix(prefix string) {
 	api.Settings.Prefix = prefix
 }
 
