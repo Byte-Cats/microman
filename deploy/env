@@ -7,21 +7,28 @@ API_MARK="v1" # the version of the api
 # Database Settings
 DATABASE_TYPE="postgres" # the type of the database
 DATABASE_HOST="localhost"
-DATABASE_PORT= 5432
+DATABASE_PORT=5432
 DATABASE_NAME="postgres"
 DATABASE_USER="postgres"
 DATABASE_PASSWORD="postgres"
 
 # DATABASE_TYPE="mysql" # the type of the database
 # DATABASE_HOST="localhost"
-# DATABASE_PORT= 3306
+# DATABASE_PORT=3306
 # DATABASE_NAME="mysql"
 # DATABASE_USER="root"
 # DATABASE_PASSWORD="root"
 
 # DATABASE_TYPE="sqlite3" # the type of the database
 # DATABASE_HOST="localhost"
-# DATABASE_PORT= 3306
+# DATABASE_PORT=3306
 # DATABASE_NAME="sqlite3"
+# DATABASE_USER="root"
+# DATABASE_PASSWORD="root"
+
+# DATABASE_TYPE="mongodb" # the type of the database
+# DATABASE_HOST="localhost"
+# DATABASE_PORT=3306
+# DATABASE_NAME="mongodb"
 # DATABASE_USER="root"
 # DATABASE_PASSWORD="root"
