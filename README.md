@@ -8,10 +8,10 @@ Minimal Go Api Starter Kit without frameworks
 - [x] Heavily Commentated
 - [x] Example Routes
 - [ ] Subrouting
+- [ ] Example Database Use
 - [ ] JWT Ready
 - [ ] Users
 - [ ] Authentication
-- [ ] Example Database Use
 - [ ] Poggy Build Scripts
 - [ ] Docker
 - [ ] Kubernetes
