@@ -183,7 +183,26 @@ func GetSettings(api *Api) Settings {
 
 // GetFullPath is a function that returns the full path of the Api
 func GetFullPath(api *Api) string {
-	return GetHostname(api) + ":" + GetPort(api)
+	var pathToReturn string
+	switch GetPort(api) {
+	case "":
+		// is it possible? even if we aren't setting it manually,
+		// CheckPort(api) func is setting it to env default
+		fmt.Println("The port value is empty. Something gone really wrong =/")
+		break
+	case "80":
+		// HTTP protocol port
+		fmt.Println("HTTP protocol port is set.")
+		pathToReturn = GetHostname(api) + ":" + GetPort(api)
+		break
+	case "443":
+		// HTTPS protocol port
+		pathToReturn = GetHostname(api)
+		break
+	default:
+		pathToReturn = GetHostname(api) + ":" + GetPort(api)
+	}
+	return pathToReturn
 }
 
 // GetRnP is a function that returns port and router of the Api for http serving
