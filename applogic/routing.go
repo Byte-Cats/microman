@@ -16,6 +16,7 @@ func InitRouter(api *Api) *mux.Router {
 func InitRoutes(api *Api) {
 	router := api.Served.Router
 	router.HandleFunc("/", handlers.Home)
+	router.HandleFunc("/docs", handlers.Docs)
 	router.HandleFunc("/info", handlers.InfoDealer)
 	router.HandleFunc("/add", handlers.Adder)
 	router.HandleFunc("/delete", handlers.Deleter)
