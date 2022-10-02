@@ -9,6 +9,7 @@ Minimal Go Api Starter Kit without frameworks
 - [x] Example Routes
 - [x] Subrouting
 - [ ] Example Database Use
+- [ ] Test Automation
 - [ ] JWT Ready
 - [ ] Users
 - [ ] Authentication
