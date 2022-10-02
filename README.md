@@ -16,7 +16,7 @@ Minimal Go Api Starter Kit without frameworks
 
 ### Integration
 - [x] Docker
-- [ ] Kubernetes
+- [x] Kubernetes
 - [ ] Jenkins
 - [ ] Travis.ci
 - [ ] Terraform
