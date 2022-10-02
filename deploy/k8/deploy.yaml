@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-demo
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      deploy: web
+  template:
+    metadata:
+      labels:
+        deploy: web
+    spec:
+      containers:
+      - name: deploy-site
+        image: entry
+        imagePullPolicy: Never
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: deploy-entrypoint
+  namespace: default
+spec:
+  type: NodePort
+  selector:
+    deploy: web
+  ports:
+  - port: 3000
+    targetPort: 3000
+    nodePort: 30001
