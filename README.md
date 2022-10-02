@@ -15,7 +15,7 @@ Minimal Go Api Starter Kit without frameworks
 - [ ] Poggy Build Scripts
 
 ### Integration
-- [ ] Docker
+- [x] Docker
 - [ ] Kubernetes
 - [ ] Jenkins
 - [ ] Travis.ci
