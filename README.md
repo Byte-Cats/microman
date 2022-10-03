@@ -13,6 +13,7 @@ Minimal Go Api Starter Kit without frameworks
 - [ ] JWT Ready
 - [ ] Users
 - [ ] Authentication
+- [ ] Logging System
 - [ ] Poggy Build Scripts
 
 ### Integration
