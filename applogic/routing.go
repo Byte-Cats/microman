@@ -33,3 +33,4 @@ func InitDefaultRouter(api *Api) {
 func GetRouter(api *Api) *mux.Router {
 	return api.Served.Router
 }
+final test	
