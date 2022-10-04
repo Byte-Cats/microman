@@ -24,3 +24,4 @@ func test() *Api {
 
     return api
 }
+test
