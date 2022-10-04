@@ -15,3 +15,12 @@ func DefaultAPIClient() *Api {
 
     return api
 }
+
+func test() *Api {
+    api := new(Api)
+    CheckSettings(api)
+    InitDefaultRouter(api)
+    ServerSetup(api)
+
+    return api
+}
