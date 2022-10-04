@@ -24,21 +24,3 @@ func test() *Api {
 
     return api
 }
-
-func test2() *Api {
-    api := new(Api)
-    CheckSettings(api)
-    InitDefaultRouter(api)
-    ServerSetup(api)
-
-    return api
-}
-
-func test3() *Api {
-    api := new(Api)
-    CheckSettings(api)
-    InitDefaultRouter(api)
-    ServerSetup(api)
-
-    return api
-}
