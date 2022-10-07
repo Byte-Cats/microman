@@ -15,7 +15,8 @@ func InitRouter(api *Api) *mux.Router {
 // InitRoutes setup all handlers routing
 func InitRoutes(api *Api) {
 	router := api.Served.Router
-	router.HandleFunc("/", handlers.Home)
+	router.HandleFunc("/", handlers.Redirect)
+	router.HandleFunc("/home", handlers.Home)
 	router.HandleFunc("/docs", handlers.Docs)
 	router.HandleFunc("/info", handlers.InfoDealer)
 
