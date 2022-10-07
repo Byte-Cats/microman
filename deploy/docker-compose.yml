@@ -5,5 +5,7 @@ services:
       dockerfile: dockerfile
       context: ../
       target: dev
+      port:
+        - '${APP_PORT}:${APP_PORT}'
     volumes:
       - .:/opt/app/api
