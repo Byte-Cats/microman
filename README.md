@@ -18,7 +18,6 @@ Minimal Go Api Starter Kit without frameworks
 - [ ] JWT Ready
 - [ ] Example Database Use
 - [ ] Test Automation
-
 - [ ] Users
 - [ ] Authentication
 - [ ] Logging System
