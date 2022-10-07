@@ -3,7 +3,7 @@ services:
   app:
     build:
       dockerfile: dockerfile
-      context: ../deploy
+      context: ../
       target: dev
     volumes:
       - .:/opt/app/api
