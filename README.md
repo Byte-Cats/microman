@@ -1,6 +1,8 @@
 # microman
 Minimal Go Api Starter Kit without frameworks
 
+[![CodeQL](https://github.com/Byte-Cats/microman/actions/workflows/codeql.yml/badge.svg)](https://github.com/Byte-Cats/microman/actions/workflows/codeql.yml)
+
 ### Features
 - [x] Api Object
 - [x] Basic Settings
@@ -8,6 +10,7 @@ Minimal Go Api Starter Kit without frameworks
 - [x] Heavily Commentated
 - [x] Example Routes
 - [x] Subrouting
+- [ ] 
 - [ ] Auto Generated Api Docs
 - [ ] Example Database Use
 - [ ] Test Automation
