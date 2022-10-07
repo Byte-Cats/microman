@@ -1,7 +1,8 @@
 # microman
-Minimal Go Api Starter Kit without frameworks
 
 [![CodeQL](https://github.com/Byte-Cats/microman/actions/workflows/codeql.yml/badge.svg)](https://github.com/Byte-Cats/microman/actions/workflows/codeql.yml)
+
+Minimal Go Api Starter Kit without frameworks
 
 ### Features
 - [x] Api Object
