@@ -15,8 +15,8 @@ func InitMiddleware(secret string) *jwtMiddleware.JWTMiddleware {
 		ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
 			return []byte(secret), nil
 		},
-		SignMethod: jwt.SigningMethodHS256,
-		Extractor:  jwtMiddleware.FromFirst(jwtMiddleware.FromAuthHeader),
+		SigningMethod: jwt.SigningMethodHS256,
+		Extractor:     jwtMiddleware.FromFirst(jwtMiddleware.FromAuthHeader),
 	})
 	return middleware
 }
