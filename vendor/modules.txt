@@ -1,3 +1,12 @@
+# github.com/auth0/go-jwt-middleware v1.0.1
+## explicit; go 1.14
+github.com/auth0/go-jwt-middleware
+# github.com/form3tech-oss/jwt-go v3.2.5+incompatible
+## explicit
+github.com/form3tech-oss/jwt-go
 # github.com/gorilla/mux v1.8.0
 ## explicit; go 1.12
 github.com/gorilla/mux
+# github.com/urfave/negroni v1.0.0
+## explicit
+github.com/urfave/negroni
