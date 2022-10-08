@@ -20,6 +20,7 @@ func InitRoutes(api *Api) {
 	router.HandleFunc("/docs", handlers.Docs)
 	router.HandleFunc("/info", handlers.InfoDealer)
 
+	// Rest endpoints
 	router.HandleFunc("/get", handlers.Get)
 	router.HandleFunc("/add", handlers.Adder)
 	router.HandleFunc("/delete", handlers.Deleter)

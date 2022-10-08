@@ -1,12 +1,11 @@
 version: "3.9"
 services:
-  app:
+  microman:
     build:
-      dockerfile: Dockerfile
       context: ../
+      dockerfile: ../Dockerfile
       target: dev
+    container_name: ${SERVICE_NAME}
+    ports:
+      - ${EXPORTED_APP_PORT}:${APP_PORT}
 
-  port: '${APP_PORT}:${APP_PORT}'
-
-  volumes:
-    - .:/opt/app/api
