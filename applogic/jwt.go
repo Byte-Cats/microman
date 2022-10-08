@@ -5,7 +5,6 @@ import (
 
 	jwtMiddleware "github.com/auth0/go-jwt-middleware"
 	"github.com/form3tech-oss/jwt-go"
-	_ "github.com/form3tech-oss/jwt-go"
 	"github.com/gorilla/mux"
 	"github.com/urfave/negroni"
 )
