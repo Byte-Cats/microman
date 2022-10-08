@@ -1,7 +1,9 @@
-package applogic
+package auth
 
 import (
+	"encoding/hex"
 	"net/http"
+	"os"
 
 	jwtMiddleware "github.com/auth0/go-jwt-middleware"
 	"github.com/form3tech-oss/jwt-go"
@@ -9,10 +11,10 @@ import (
 	"github.com/urfave/negroni"
 )
 
-func InitMiddleware(secret string) *jwtMiddleware.JWTMiddleware {
+func InitMiddleware(secret []byte) *jwtMiddleware.JWTMiddleware {
 	middleware := jwtMiddleware.New(jwtMiddleware.Options{
 		ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
-			return []byte(secret), nil
+			return secret, nil
 		},
 		SigningMethod: jwt.SigningMethodHS256,
 		Extractor:     jwtMiddleware.FromFirst(jwtMiddleware.FromAuthHeader),
@@ -25,4 +27,20 @@ func SecureEndpoint(path string, middleware *jwtMiddleware.JWTMiddleware, handle
 		negroni.HandlerFunc(middleware.HandlerWithNext),
 		negroni.Wrap(http.HandlerFunc(handler)),
 	))
+}
+
+func getSecret() []byte {
+	secret := os.Getenv("SECRET")
+	if secret == "" {
+		panic("Error: Must provide a secret key under env variable SECRET")
+	}
+
+	secretbite, err := hex.DecodeString(secret)
+
+	if err != nil {
+		// probably malformed secret, panic out
+		panic(err)
+	}
+
+	return secretbite
 }

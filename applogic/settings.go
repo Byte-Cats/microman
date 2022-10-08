@@ -16,17 +16,18 @@ type Settings struct {
 	Port string
 	// Version of the Api
 	Version string
+	// Secret is the secret key of the app
 }
 
 // Template is a struct that holds the default settings of the Api
 type Template struct {
-	// Default title of the api instance
+	// Default title of Api instance
 	Title string
-	// Default hostname of the api server (default: localhost)
+	// Default hostname of Api server (default: localhost)
 	Hostname string
-	// Default port that the server will listen on
+	// Default port that server will listen on
 	Port string
-	// Default version of the Api
+	// Default version of Api
 	Version string
 }
 
@@ -141,7 +142,7 @@ func GetVersion(api *Api) string {
 	return api.Settings.Version
 }
 
-// ShowVersion is a function that prints the version of the Api
+// ShowVersion is a function that prints the version of Api
 func ShowVersion(api *Api) {
 	println(api.Settings.Version)
 }
