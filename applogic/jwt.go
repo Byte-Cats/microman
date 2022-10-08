@@ -21,7 +21,7 @@ func InitMiddleware(secret string) *jwtMiddleware.JWTMiddleware {
 	return middleware
 }
 
-func SecureEndpoint(middleware *jwtMiddleware.JWTMiddleware, handler http.HandlerFunc, router *mux.Router) {
+func SecureEndpoint(path string, middleware *jwtMiddleware.JWTMiddleware, handler http.HandlerFunc, router *mux.Router) {
 	router.Handle(path, negroni.New(
 		negroni.HandlerFunc(middleware.HandlerWithNext),
 		negroni.Wrap(http.HandlerFunc(handler)),
