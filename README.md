@@ -22,7 +22,7 @@ Minimal Go Api Starter Kit without frameworks
 - [ ] Authentication
 - [ ] Logging System
 - [ ] Poggy Build Scripts
-- [ ] Sexier Documentation
+- [ ] Sexier Documentation (More readme's EVERYWHERE???)
 
 ### Integration
 - [x] Github
