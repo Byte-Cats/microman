@@ -71,7 +71,9 @@ You can use EKS for this.
 ### Notes from Backend Team
 
 
-### Notes from Dev Ops
+### Notes from DevOps
+
+
 technical thinking thoughts be bussin
 
 

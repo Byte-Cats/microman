@@ -7,3 +7,7 @@ go build -o bin/ ./../cmd/microbro/;
 echo "Default Config Copying to build directory..."
 cp env bin/.env
 echo "Build complete!";
+
+docker build -t go-kubernetes
+
+docker tag go-kubernetes 
