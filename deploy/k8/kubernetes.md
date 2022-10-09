@@ -63,7 +63,15 @@ You can use EKS for this.
 ... To be continued ...
 
 
+## Byte Thoughts:
 
-## Notes from our Devops Team
+### Notes from Cloud Team
+
+
+### Notes from Backend Team
+
+
+### Notes from Dev Ops
+technical thinking thoughts be bussin
 
 
