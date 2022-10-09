@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      name: microman
+  template:
+    metadata:
+      labels:
+        name: microman
+    spec:
+      containers:
+      - name: microman
+        image: microman/deployment
+        imagePullPolicy: Never
+      restartPolicy: Never
