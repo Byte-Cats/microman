@@ -6,7 +6,16 @@
 
 Minimal Go Api Starter Kit without frameworks
 
-# HEY DEVS Please put a table of contents here that goes to each header when clicked
+Table of contents
+=================
+
+<!--ts-->
+   * [Features](#features)
+   * [Integration](#integration)
+   * [Links and Literature](#links-and-literature)
+
+<!--te-->
+
 
 ### Features
 - [x] Api Object
