@@ -14,7 +14,7 @@ Minimal Go Api Starter Kit without frameworks
 - [x] Example Routes
 - [x] Sub-routing
 - [ ] Auto Generated Api Docs
-- [ ] Redirect
+- [x] Redirect
 - [ ] JWT Ready
 - [ ] Example Database Use
 - [ ] Test Automation
@@ -22,6 +22,7 @@ Minimal Go Api Starter Kit without frameworks
 - [ ] Authentication
 - [ ] Logging System
 - [ ] Poggy Build Scripts
+- [ ] Sexier Documentation
 
 ### Integration
 - [x] Github
