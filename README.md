@@ -1,7 +1,6 @@
 # microman
 
 [![CodeQL](https://github.com/Byte-Cats/microman/actions/workflows/codeql.yml/badge.svg)](https://github.com/Byte-Cats/microman/actions/workflows/codeql.yml)
-
 [![Go Report Card](https://goreportcard.com/badge/github.com/byte-cats/microman)](https://goreportcard.com/report/github.com/byte-cats/microman)
 
 
