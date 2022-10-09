@@ -6,6 +6,8 @@
 
 Minimal Go Api Starter Kit without frameworks
 
+Please put a table of contents here that goes to each header when clicked
+
 ### Features
 - [x] Api Object
 - [x] Basic Settings
