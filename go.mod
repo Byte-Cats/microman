@@ -1,4 +1,4 @@
-module microman
+module github.com/byte-cats/microman
 
 go 1.18
 
