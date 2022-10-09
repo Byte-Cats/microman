@@ -1,7 +1,7 @@
-echo "basic ass build script"
+echo "Checking dependencies and formatting..."
 cd ../ && go mod tidy && go mod vendor &&  gofmt ./ && golangci-lint run && cd deploy ;
 
-echo "Checking dependencies and formatting..."
+echo "Building Binary Executable..."
 go build -o bin/ ./../cmd/microbro/;
 
 echo "Default Config Copying to build directory..."

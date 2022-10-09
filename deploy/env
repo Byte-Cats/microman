@@ -1,27 +1,36 @@
 # App Settings
-API_NAME="MICRO_API" # the name of the api
+API_NAME=MICRO_API # the name of the api
 API_PORT=9090 # the port the api will run on
-API_HOST="localhost" # the host the api will run on
-API_MARK="v1" # the version of the api
+API_HOST=localhost # the host the api will run on
+API_VERSION=0.0.9 # the version of the api
+
+# K8 Settings
+API_MARK="v1" # for use with k8 deployment
+API_NAMESPACE=default # for use with k8 deployment
+
+# Auth Settings
+SECRET=secret # the secret used to sign the JWT
+TOKEN_EXPIRY=1h # the expiry time of the JWT
+TOKEN_ISSUER=micro-api # the issuer of the JWT
 
 # Database Settings
-DATABASE_TYPE="postgres" # the type of the database
-DATABASE_HOST="localhost"
-DATABASE_PORT= 5432
-DATABASE_NAME="postgres"
-DATABASE_USER="postgres"
-DATABASE_PASSWORD="postgres"
+DATABASE_TYPE=postgres # the type of the database
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+DATABASE_NAME=postgres
+DATABASE_USER=postgres
+DATABASE_PASSWORD=postgres
 
-# DATABASE_TYPE="mysql" # the type of the database
-# DATABASE_HOST="localhost"
-# DATABASE_PORT= 3306
-# DATABASE_NAME="mysql"
-# DATABASE_USER="root"
-# DATABASE_PASSWORD="root"
+# DATABASE_TYPE=mysql # the type of the database
+# DATABASE_HOST=localhost
+# DATABASE_PORT=3306
+# DATABASE_NAME=mysql
+# DATABASE_USER=root
+# DATABASE_PASSWORD=root
 
-# DATABASE_TYPE="sqlite3" # the type of the database
-# DATABASE_HOST="localhost"
+# DATABASE_TYPE=sqlite3 # the type of the database
+# DATABASE_HOST=localhost
 # DATABASE_PORT= 3306
-# DATABASE_NAME="sqlite3"
-# DATABASE_USER="root"
-# DATABASE_PASSWORD="root"
+# DATABASE_NAME=sqlite3
+# DATABASE_USER=root
+# DATABASE_PASSWORD=root
