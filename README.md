@@ -30,3 +30,8 @@ Minimal Go Api Starter Kit without frameworks
 - [x] Kubernetes
 - [x] Jenkins
 - [ ] Travis.ci
+
+### Links and Literature
+- link one here
+- book reference here
+- Github repo link here
