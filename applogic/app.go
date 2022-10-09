@@ -24,5 +24,3 @@ func test() *Api {
 
     return api
 }
-test
-another small test  
