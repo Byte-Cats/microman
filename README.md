@@ -12,7 +12,7 @@ Minimal Go Api Starter Kit without frameworks
 - [x] Simple FS
 - [x] Heavily Commentated
 - [x] Example Routes
-- [x] Subrouting
+- [x] Sub-routing
 - [ ] Auto Generated Api Docs
 - [ ] Redirect
 - [ ] JWT Ready

@@ -29,7 +29,7 @@ func SecureEndpoint(path string, middleware *jwtMiddleware.JWTMiddleware, handle
 	))
 }
 
-func getSecret() []byte {
+func CheckSecret() []byte {
 	secret := os.Getenv("SECRET")
 	if secret == "" {
 		panic("Error: Must provide a secret key under env variable SECRET")
