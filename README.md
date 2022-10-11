@@ -39,7 +39,7 @@ Table of contents
 - [ ] Sexier Documentation (More readme's EVERYWHERE???)
 
 ### Integration
-- [x] Github
+- [x] Github Actions
 - [x] Docker
 - [x] Kubernetes
 - [x] Jenkins
