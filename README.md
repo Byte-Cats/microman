@@ -1,7 +1,7 @@
 # microman
 
 [![CodeQL](https://github.com/Byte-Cats/microman/actions/workflows/codeql.yml/badge.svg)](https://github.com/Byte-Cats/microman/actions/workflows/codeql.yml)
-[![CodeQL](https://github.com/Byte-Cats/microman/actions/workflows/codeql.yml/badge.svg)](https://github.com/Byte-Cats/microman/actions/workflows/codeql.yml)
+[![Go](https://github.com/Byte-Cats/microman/actions/workflows/go.yml/badge.svg)](https://github.com/Byte-Cats/microman/actions/workflows/go.yml)
 [![Go Reference](https://pkg.go.dev/badge/github.com/byte-cats/microman#section-readme.svg)](https://pkg.go.dev/github.com/byte-cats/microman#section-readme)
 [![Go Report Card](https://goreportcard.com/badge/github.com/byte-cats/microman)](https://goreportcard.com/report/github.com/byte-cats/microman)
 
