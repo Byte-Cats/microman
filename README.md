@@ -38,7 +38,6 @@ Table of contents
 - [ ] Test Automation
 - [ ] Users
 - [ ] Authentication
-
 - [ ] Poggy Build Scripts
 - [ ] Sexier Documentation (More readme's EVERYWHERE???)
 
