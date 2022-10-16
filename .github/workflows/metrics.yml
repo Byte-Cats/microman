@@ -13,7 +13,7 @@ jobs:
         with:
           token: ${{secrets.METRICS_TOKEN}} 
           # Options
-          organization: ByteCats
+          user: 4cecoder
           template: classic
           base: header, activity, community, repositories, metadata
           config_timezone: America/Fortaleza
