@@ -30,14 +30,15 @@ Table of contents
 - [x] Heavily Commentated
 - [x] Example Routes
 - [x] Sub-routing
-- [ ] Auto Generated Api Docs
+- [ ] Logging System
 - [x] Redirect
 - [ ] JWT Ready
+- [ ] Auto Generated Api Docs
 - [ ] Example Database Use
 - [ ] Test Automation
 - [ ] Users
 - [ ] Authentication
-- [ ] Logging System
+
 - [ ] Poggy Build Scripts
 - [ ] Sexier Documentation (More readme's EVERYWHERE???)
 
