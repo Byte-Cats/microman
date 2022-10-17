@@ -12,7 +12,7 @@
 
 
 
-### Minimal Go Api Starter Kit without frameworks
+## Minimal Go Api Starter Kit without frameworks
   
 </div>
 
