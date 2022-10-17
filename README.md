@@ -27,7 +27,8 @@ Table of contents
    * [Integration](#integration)
    * [Documentation](#documentation)
    * [Links and Literature](#links-and-literature)
-
+   * [Kubernetes](docs/kubernetes.md)
+   * [Docker](docs/docker.md)
 
 <!--te-->
 
@@ -56,15 +57,3 @@ Table of contents
 - [x] Kubernetes
 - [x] Jenkins
 - [ ] Travis.ci
-
-### Documentation
-
-   * [Kubernetes](docs/kubernetes.md)
-   * [Docker](docs/docker.md)
-
-### Links and Literature
-- link one here
-- book reference here
-- Github repo link here
-
-
