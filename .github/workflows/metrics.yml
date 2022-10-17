@@ -15,7 +15,7 @@ jobs:
           # Options
           user: ByteCats
           repo: microman
-          template: repository
+          template: classic
           base: header, activity, community, repositories, metadata
           config_timezone: America/Fortaleza
           plugin_followup: yes
