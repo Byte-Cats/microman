@@ -28,7 +28,6 @@ Table of contents
 <!--ts-->
    * [Features](#features)
    * [Integration](#integration)
-   * [Documentation](#documentation)
    * [Kubernetes](docs/kubernetes.md)
    * [Docker](docs/docker.md)
 
