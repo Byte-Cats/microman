@@ -29,7 +29,6 @@ Table of contents
    * [Features](#features)
    * [Integration](#integration)
    * [Documentation](#documentation)
-   * [Links and Literature](#links-and-literature)
    * [Kubernetes](docs/kubernetes.md)
    * [Docker](docs/docker.md)
 
