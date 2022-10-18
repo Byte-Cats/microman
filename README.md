@@ -59,4 +59,4 @@ Table of contents
 - [x] Docker
 - [x] Kubernetes
 - [x] Jenkins
-- [ ] Travis.ci
+- [x] Travis.ci
