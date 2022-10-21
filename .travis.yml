@@ -1,0 +1,19 @@
+os: linux
+
+language: go
+
+go:
+- tip # The latest version of Go.
+
+script:
+- "./deploy/build.sh"
+
+deploy:
+  provider: releases
+  skip_cleanup: true # Important, otherwise the build output would be purged.
+  api_key:
+    secure: lFGBaF...SJ1lDPDICY=
+  file: bin/microman
+  on:
+    repo: byte-cats/microman
+    tags: true # The deployment happens only if the commit has a tag.
