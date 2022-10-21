@@ -1,36 +1,29 @@
 package applogic
 
 import (
-	"net/http"
-
-	"github.com/sirupsen/logrus"
+	"encoding/json"
+	"fmt"
+	"os"
 )
 
-type Event struct {
-	id      int
-	message string
-}
+func Log(format string, v ...any) {
+	byteArray, err := json.Marshal(format)
+	if err != nil {
+		fmt.Println(err)
+	}
+	f, err := os.OpenFile("github.com/byte-cats/microman/log/logging.json", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer f.Close()
 
-type StandardLogger struct {
-	*logrus.Logger
-}
+	n, err := f.Write(byteArray)
+	if err != nil {
+		fmt.Println(n, err)
+	}
 
-// Function that creates a logger to use where we need to log smth
-func NewLogger() *StandardLogger {
-	var baseLogger = logrus.New()
-	var standardLogger = &StandardLogger{baseLogger}
-	standardLogger.Formatter = &logrus.JSONFormatter{}
-	return standardLogger
-}
-
-// Vars which specify fields of logging output
-var (
-	baseInfo = Event{1, "Successful request: %v"}
-)
-
-// Method that specifies which var of logging output
-// is to be used in logging
-func (l *StandardLogger) baseInfo(r *http.Request) {
-	l.Println(baseInfo.message, r.Method)
-
+	if n, err = f.WriteString("\n"); err != nil {
+		fmt.Println(n, err)
+	}
 }

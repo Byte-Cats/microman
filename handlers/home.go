@@ -2,8 +2,9 @@ package handlers
 
 import (
 	"fmt"
-	"log"
 	"net/http"
+
+	"github.com/byte-cats/microman/applogic"
 )
 
 // HomeSecrets the secrets of the home page to be displayed
@@ -18,5 +19,5 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
-	log.Printf("Handling a request with method \"%v\" on a url = \"%v\"", r.Method, r.RequestURI)
+	applogic.Log("Handling a request with method \"%v\" on a url = \"%v\"", r.Method, r.RequestURI)
 }
