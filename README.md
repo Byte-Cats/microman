@@ -1,6 +1,6 @@
 <div align="center";>
 
-# microman
+# microman [WIP]
 
 [![CodeQL](https://github.com/Byte-Cats/microman/actions/workflows/codeql.yml/badge.svg)](https://github.com/Byte-Cats/microman/actions/workflows/codeql.yml)
 [![Go](https://github.com/Byte-Cats/microman/actions/workflows/go.yml/badge.svg)](https://github.com/Byte-Cats/microman/actions/workflows/go.yml)
