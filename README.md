@@ -35,7 +35,8 @@ Table of contents
 <!--te-->
 
 ## About
-Using production experience and general principals in order to create the perfect microservice setup
+- Using production experience and general principals in order to create the perfect microservice setup
+- Uses [datastation](https://github.com/byte-cats/datastation) which is a library we made to let the user choose and configure a database quickly
 
 
 ### Features
