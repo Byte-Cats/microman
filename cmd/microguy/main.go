@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"microman/applogic"
+	"github.com/byte-cats/microman/applogic"
 )
 
 // main is the entry point for the microguy application.
