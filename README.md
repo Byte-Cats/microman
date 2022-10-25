@@ -41,7 +41,7 @@ Table of contents
 - [x] Heavily Commentated
 - [x] Example Routes
 - [x] Sub-routing
-- [ ] Logging System
+- [x] Logging System
 - [x] Redirect
 - [ ] JWT Ready
 - [ ] Auto Generated Api Docs
