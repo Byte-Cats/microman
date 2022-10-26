@@ -1,7 +1,7 @@
 package applogic
 
 import (
-	"microman/handlers"
+	"github.com/byte-cats/microman/handlers"
 
 	"github.com/gorilla/mux"
 )
