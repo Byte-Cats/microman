@@ -20,7 +20,7 @@ type Settings struct {
 	// Secret is the secret key of the app
 }
 
-// Template is a struct that holds the default settings of the Api
+// Template struct that holds the default settings of the Api
 type Template struct {
 	// Default title of Api instance
 	Title string
@@ -32,7 +32,7 @@ type Template struct {
 	Version string
 }
 
-// DefaultTemplate is the default template of the Api settings
+// DefaultTemplate default template of the Api settings
 func DefaultTemplate() Template {
 	return Template{
 		Title:    "Micro Dude Api",
@@ -42,7 +42,7 @@ func DefaultTemplate() Template {
 	}
 }
 
-// CheckTitle is a function that checks if the title is set from .env
+// CheckTitle checks if the title is set from .env
 func CheckTitle(api *Api, template string) {
 	// Check the variables from env and set them to the settings
 	// if they are not set, set them to the default values
@@ -53,7 +53,7 @@ func CheckTitle(api *Api, template string) {
 	}
 }
 
-// CheckHostname is a function that checks if the hostname is set from .env
+// CheckHostname checks if the hostname is set from .env
 func CheckHostname(api *Api, template string) {
 	// Check the variables from env and set them to the settings
 	// if they are not set, set them to the default values
@@ -64,7 +64,7 @@ func CheckHostname(api *Api, template string) {
 	}
 }
 
-// CheckPort is a function that checks if the port is set from .env
+// CheckPort checks if the port is set from .env
 func CheckPort(api *Api, template string) {
 	api.Settings.Port = os.Getenv("PORT")
 	if api.Settings.Port == "" {
@@ -72,7 +72,7 @@ func CheckPort(api *Api, template string) {
 	}
 }
 
-// CheckVersion is a function that checks if the version is set from .env
+// CheckVersion checks if the version is set from .env
 func CheckVersion(api *Api, template string) {
 	api.Settings.Version = os.Getenv("VERSION")
 	if api.Settings.Version == "" {
@@ -80,7 +80,7 @@ func CheckVersion(api *Api, template string) {
 	}
 }
 
-// CheckSettings is a function that checks if the settings are set from .env
+// CheckSettings checks if the settings are set from .env
 func CheckSettings(api *Api) {
 	CheckTitle(api, DefaultTemplate().Title)
 	CheckHostname(api, DefaultTemplate().Hostname)
@@ -88,77 +88,77 @@ func CheckSettings(api *Api) {
 	CheckVersion(api, DefaultTemplate().Version)
 }
 
-// SetPort is a function that sets the port of the Api
+// SetPort sets the port of the Api
 func SetPort(api *Api, port string) {
 	api.Settings.Port = port
 }
 
-// GetPort is a function that returns the port of the Api
+// GetPort returns the port of the Api
 func GetPort(api *Api) string {
 	return api.Settings.Port
 }
 
-// ShowPort is a function that returns the router of the Api
+// ShowPort returns the router of the Api
 func ShowPort(api *Api) {
 	println(api.Settings.Port)
 }
 
-// SetTitle is a function that sets the title of the Api
+// SetTitle sets the title of the Api
 func SetTitle(api *Api, title string) {
 	api.Settings.Title = title
 }
 
-// GetTitle is a function that returns the title of the Api
+// GetTitle returns the title of the Api
 func GetTitle(api *Api) string {
 	return api.Settings.Title
 }
 
-// ShowTitle is a function that prints the title of the Api
+// ShowTitle prints the title of the Api
 func ShowTitle(api *Api) {
 	println(api.Settings.Title)
 }
 
-// SetHostname is a function that sets the hostname of the Api
+// SetHostname sets the hostname of the Api
 func SetHostname(api *Api, hostname string) {
 	api.Settings.Hostname = hostname
 }
 
-// GetHostname is a function that returns the hostname of the Api
+// GetHostname returns the hostname of the Api
 func GetHostname(api *Api) string {
 	return api.Settings.Hostname
 }
 
-// ShowHostname is a function that prints the hostname of the Api
+// ShowHostname prints the hostname of the Api
 func ShowHostname(api *Api) {
 	println(api.Settings.Hostname)
 }
 
-// SetVersion is a function that sets the version of the Api
+// SetVersion sets the version of the Api
 func SetVersion(api *Api, version string) {
 	api.Settings.Version = version
 }
 
-// GetVersion is a function that returns the version of the Api
+// GetVersion returns the version of the Api
 func GetVersion(api *Api) string {
 	return api.Settings.Version
 }
 
-// ShowVersion is a function that prints the version of Api
+// ShowVersion prints the version of Api
 func ShowVersion(api *Api) {
 	println(api.Settings.Version)
 }
 
-// GetSettings is a function that returns the settings of the Api
+// GetSettings returns the settings of the Api
 func GetSettings(api *Api) Settings {
 	return api.Settings
 }
 
-// GetFullPath is a function that returns the full path of the Api
+// GetFullPath returns the full path of the Api
 func GetFullPath(api *Api) string {
 	return GetHostname(api) + ":" + GetPort(api)
 }
 
-// GetRnP is a function that returns port and router of the Api for http serving
+// GetRnP returns port and router of the Api for http serving
 func GetRnP(api *Api) (string, *mux.Router) {
 	return ":" + GetPort(api), server.GetRouter(api)
 }
