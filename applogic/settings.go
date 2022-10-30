@@ -1,6 +1,7 @@
 package applogic
 
 import (
+	"github.com/byte-cats/microman/server"
 	"os"
 
 	"github.com/gorilla/mux"
@@ -159,5 +160,5 @@ func GetFullPath(api *Api) string {
 
 // GetRnP is a function that returns port and router of the Api for http serving
 func GetRnP(api *Api) (string, *mux.Router) {
-	return ":" + GetPort(api), GetRouter(api)
+	return ":" + GetPort(api), server.GetRouter(api)
 }
