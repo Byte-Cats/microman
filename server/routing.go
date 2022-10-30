@@ -1,20 +1,19 @@
-package server
+package applogic
 
 import (
-	"github.com/byte-cats/microman/applogic"
-	"microman/handlers"
+	"github.com/byte-cats/microman/handlers"
 
 	"github.com/gorilla/mux"
 )
 
 // InitRouter initializes the router for the api client
-func InitRouter(api *applogic.Api) *mux.Router {
+func InitRouter(api *Api) *mux.Router {
 	api.Served.Router = mux.NewRouter().StrictSlash(true)
 	return api.Served.Router
 }
 
 // InitRoutes setup all handlers routing
-func InitRoutes(api *applogic.Api) {
+func InitRoutes(api *Api) {
 	router := api.Served.Router
 	// General Api endpoints
 	router.HandleFunc("/", handlers.Redirect)
@@ -34,12 +33,12 @@ func InitRoutes(api *applogic.Api) {
 }
 
 // InitDefaultRouter for api instance
-func InitDefaultRouter(api *applogic.Api) {
+func InitDefaultRouter(api *Api) {
 	InitRouter(api)
 	InitRoutes(api)
 }
 
 // GetRouter returns the router of the api instance
-func GetRouter(api *applogic.Api) *mux.Router {
+func GetRouter(api *Api) *mux.Router {
 	return api.Served.Router
 }
