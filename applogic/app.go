@@ -12,8 +12,9 @@ type Api struct {
 func DefaultAPIClient() *Api {
 	api := new(Api)
 	CheckSettings(api)
-	server.InitDefaultRouter(api)
-	server.ServerSetup(api)
+
+	//server.InitDefaultRouter(api)
+	server.ServSetup(api)
 
 	return api
 }
