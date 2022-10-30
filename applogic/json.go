@@ -2,12 +2,13 @@ package applogic
 
 import (
 	"encoding/json"
+	"github.com/byte-cats/microman/log"
 )
 
 func JsonConvert(value interface{}) (string, error) {
 	content, err := json.Marshal(value)
 	if err != nil {
-		Log("%v", err)
+		log.Log("%v", err)
 	}
 	return string(content), nil
 }

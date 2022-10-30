@@ -1,4 +1,4 @@
-package applogic
+package log
 
 import (
 	"encoding/json"
@@ -16,7 +16,12 @@ func Log(format string, v ...any) {
 		fmt.Println(err)
 		return
 	}
-	defer f.Close()
+	defer func(f *os.File) {
+		err := f.Close()
+		if err != nil {
+
+		}
+	}(f)
 
 	n, err := f.Write(byteArray)
 	if err != nil {
