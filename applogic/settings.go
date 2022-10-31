@@ -20,21 +20,9 @@ type Settings struct {
 	// Secret is the secret key of the app
 }
 
-// Template struct that holds the default settings of the Api
-type Template struct {
-	// Default title of Api instance
-	Title string
-	// Default hostname of Api server (default: localhost)
-	Hostname string
-	// Default port that server will listen on
-	Port string
-	// Default version of Api
-	Version string
-}
-
 // DefaultTemplate default template of the Api settings
-func DefaultTemplate() Template {
-	return Template{
+func DefaultTemplate() *Settings {
+	return &Settings{
 		Title:    "Micro Dude Api",
 		Hostname: "localhost",
 		Port:     "6969",
