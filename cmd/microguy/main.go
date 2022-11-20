@@ -1,8 +1,9 @@
 package main
 
 import (
-	al "github.com/byte-cats/microman/applogic"
 	"log"
+
+	al "github.com/byte-cats/microman/app"
 
 	"github.com/byte-cats/microman/server"
 )

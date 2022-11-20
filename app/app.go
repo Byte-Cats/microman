@@ -1,4 +1,4 @@
-package applogic
+package app
 
 import "github.com/byte-cats/microman/server"
 
@@ -13,7 +13,7 @@ func DefaultAPIClient() *Api {
 	api := new(Api)
 	CheckSettings(api)
 
-	//server.InitDefaultRouter(api)
+	// server.InitDefaultRouter(api)
 	server.ServSetup(api)
 
 	return api

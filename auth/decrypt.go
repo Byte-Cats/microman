@@ -7,7 +7,7 @@ import (
 
 // Decrypt will return the original value of the encrypted string
 func Decrypt(encryptedKey []byte) ([]byte, error) {
-	secretKey := CheckSecret()
+	secretKey := FindSecret()
 
 	block, err := aes.NewCipher(secretKey)
 

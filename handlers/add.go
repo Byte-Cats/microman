@@ -3,7 +3,7 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/byte-cats/microman/applogic"
+	"github.com/byte-cats/microman/data"
 )
 
 type Dammit struct {
@@ -17,7 +17,7 @@ func Adder(w http.ResponseWriter, r *http.Request) {
 		well: "yes",
 		ok:   1,
 	}
-	cont, _ := applogic.JsonConvert(d)
+	cont, _ := data.JsonConvert(d)
 	_, err := w.Write([]byte(cont))
 	if err != nil {
 		return

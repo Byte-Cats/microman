@@ -11,7 +11,7 @@ import (
 // an encrypted value has an IV (nonce) + actual encrypted value
 // when we decrypt, we only decrypt the latter part
 func Encrypt(key []byte) ([]byte, error) {
-	secretKey := CheckSecret()
+	secretKey := FindSecret()
 
 	block, err := aes.NewCipher(secretKey)
 	if err != nil {

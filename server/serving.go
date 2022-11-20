@@ -1,9 +1,10 @@
 package server
 
 import (
-	al "github.com/byte-cats/microman/applogic"
 	"log"
 	"net/http"
+
+	al "github.com/byte-cats/microman/app"
 
 	"github.com/gorilla/mux"
 )

@@ -29,19 +29,19 @@ func SecureEndpoint(path string, middleware *jwtMiddleware.JWTMiddleware, handle
 	))
 }
 
-// CheckSecret will check if the secret key is set and retrieve from env
-func CheckSecret() []byte {
+// FindSecret check if the secret key is set and retrieve from env
+func FindSecret() []byte {
 	secret := os.Getenv("SECRET")
 	if secret == "" {
 		panic("Error: Must provide a secret key under env variable SECRET")
 	}
 
-	secretbite, err := hex.DecodeString(secret)
+	secretBits, err := hex.DecodeString(secret)
 
 	if err != nil {
 		// probably malformed secret, panic out
 		panic(err)
 	}
 
-	return secretbite
+	return secretBits
 }

@@ -1,7 +1,8 @@
-package applogic
+package data
 
 import (
 	"encoding/json"
+
 	"github.com/byte-cats/microman/log"
 )
 

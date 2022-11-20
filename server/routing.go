@@ -1,7 +1,7 @@
 package server
 
 import (
-	al "github.com/byte-cats/microman/applogic"
+	al "github.com/byte-cats/microman/app"
 	"github.com/byte-cats/microman/handlers"
 	"github.com/gorilla/mux"
 )

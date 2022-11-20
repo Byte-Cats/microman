@@ -1,8 +1,9 @@
-package applogic
+package app
 
 import (
-	"github.com/byte-cats/microman/server"
 	"os"
+
+	"github.com/byte-cats/microman/server"
 
 	"github.com/gorilla/mux"
 )
