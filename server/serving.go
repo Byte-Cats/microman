@@ -1,10 +1,7 @@
 package server
 
 import (
-	"log"
 	"net/http"
-
-	al "github.com/byte-cats/microman/app"
 
 	"github.com/gorilla/mux"
 )
@@ -16,18 +13,8 @@ type Served struct {
 }
 
 // ServSetup is a function that sets up the web server
-func ServSetup(api *al.Api) *http.ServeMux {
-	// Creating a newServeMux to pass it in api struct and
-	api.Served.ServeUp = http.NewServeMux()
-	// return it to be used in main (maybe)
-	return api.Served.ServeUp
-}
+func ServSetup() *http.ServeMux {
 
-// RunDefaultClient is a function that serves the Api on the default port
-func RunDefaultClient(api *al.Api) {
-	log.Printf("Server is starting on port %v", api.Settings.Port)
-	err := http.ListenAndServe(al.GetRnP(api))
-	if err != nil {
-		log.Printf("Can't start a server\n\"%v\"", err)
-	}
+	// return it to be used in main (maybe)
+	return http.NewServeMux()
 }

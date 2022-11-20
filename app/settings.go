@@ -3,8 +3,6 @@ package app
 import (
 	"os"
 
-	"github.com/byte-cats/microman/server"
-
 	"github.com/gorilla/mux"
 )
 
@@ -149,5 +147,5 @@ func GetFullPath(api *Api) string {
 
 // GetRnP returns port and router of the Api for http serving
 func GetRnP(api *Api) (string, *mux.Router) {
-	return ":" + GetPort(api), server.GetRouter(api)
+	return ":" + GetPort(api), api.Served.Router
 }
