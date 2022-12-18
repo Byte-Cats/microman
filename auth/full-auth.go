@@ -1,18 +1,13 @@
-//     Consider using the net/http package's BasicAuth function to check if the username and password provided in the request match the values in the Authorization header, instead of manually parsing the request form values. This can help make the code more concise and easier to read.
-//     Consider using a dedicated function to hash and salt the password when creating a new user, rather than using bcrypt.GenerateFromPassword directly in the CreateUser function. This can help improve the readability and modularity of the code.
-//     Consider using a dedicated function to handle the POST request to the login endpoint, rather than using an inline function. This can help improve the readability and modularity of the code.
-//     Consider using a dedicated function to handle the POST request to the create user endpoint, rather than using an inline function. This can help improve the readability and modularity of the code.
-//     Consider adding comments to the code to provide more information about the purpose and behavior of each function and variable. This can help improve the understandability of the code for other developers who may work on the project in the future.
-//     Consider adding error handling code to the Decrypt and Encrypt functions to return more informative error messages when an error occurs. This can help make it easier to troubleshoot issues with the code.
+package auth
 
 import (
 	"errors"
 	"time"
-  "database/sql"
+ 	"database/sql"
 	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
+	"net/http"
 )
-
 const (
 	// ExpirationTime is the expiration time for the JWT token in hours.
 	ExpirationTime = 72
@@ -30,36 +25,44 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-// UserLogin takes in a username and password and returns a JWT token if the user is valid.
-func UserLogin(username string, password string) (string, error) {
-	// Validate input
-	if err := validateInput(username, password); err != nil {
-		return "", err
-	}
-
-	// Connect to database and retrieve user record
-	user, err := getUserFromDB(username, password)
-	if err != nil {
-		return "", err
-	}
-
-	// Generate JWT token
+// generateJWT generates a JWT token for the given user ID.
+// It returns the JWT token as a string, and any error that occurred.
+func generateJWT(userID int) (string, error) {
 	secret := FindSecret()
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims := token.Claims.(jwt.MapClaims)
-	claims["id"] = user.ID
+	claims["id"] = userID
 	claims["exp"] = time.Now().Add(time.Hour * ExpirationTime).Unix()
-	tokenString, err := token.SignedString(secret)
-	if err != nil {
-		return "", err
-	}
-
-	return tokenString, nil
+	return token.SignedString(secret)
 }
 
-// CreateUser takes in a username and password and creates a new user record in the database.
-// Returns an error if the username is already in use or if there is a problem connecting to the database.
-func CreateUser(username string, password string) error {
+// hashAndSaltPassword hashes and salts the given password using bcrypt.
+// Returns the hashed password as a byte slice, and any error that occurred.
+func hashAndSaltPassword(password string) ([]byte, error) {
+	return bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+}
+
+// handleUserLogin processes a login request for the given username and password.
+// If the user is valid, it returns a JWT token. Otherwise, it returns an error.
+func handleUserLogin(username string, password string) (string, error) {
+// Validate input
+if err := validateInput(username, password); err != nil {
+return "", err
+}
+// Connect to database and retrieve user record
+user, err := getUserFromDB(username, password)
+if err != nil {
+	return "", err
+}
+
+// Generate JWT token
+return generateJWT(user.ID)
+}
+
+
+// handleCreateUser processes a request to create a new user with the given username and password.
+// If the username is already in use, or if there is a problem connecting to the database, it returns an error.
+func handleCreateUser(username string, password string) error {
 	// Validate input
 	if err := validateInput(username, password); err != nil {
 		return err
@@ -72,7 +75,7 @@ func CreateUser(username string, password string) error {
 	}
 
 	// Hash and salt password
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	hashedPassword, err := hashAndSaltPassword(password)
 	if err != nil {
 		return err
 	}
@@ -89,6 +92,7 @@ func CreateUser(username string, password string) error {
 	return nil
 }
 
+
 // getUserFromDB retrieves a user record from the database by username and password.
 // Returns an error if no matching record is found, if there is a problem connecting to the database,
 // or if the input is invalid.
@@ -98,26 +102,64 @@ func getUserFromDB(username string, password string) (User, error) {
 		return User{}, err
 	}
 
-	var user User
-
-	// Connect to the database
-	db, err := sql.Open("mysql", "user:password@/database")
+	// Connect to database and retrieve user record
+	user := User{}
+	err := db.Where("username = ?", username).First(&user).Error
 	if err != nil {
+		return User{}, errors.New("Invalid username or password")
+	}
+
+	// Check password
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+	if err != nil {
+		return User{}, errors.New("Invalid username or password")
+	}
+
+	return user, nil
+}
+
+// getUserFromDBByUsername retrieves a user record from the database by username.
+// Returns an error if no matching record is found, or if there is a problem connecting to the database.
+func getUserFromDBByUsername(username string) (User, error) {
+	// Validate input
+	if err := validateInput(username, ""); err != nil {
 		return User{}, err
 	}
-	defer db.Close()
 
-	// Query the database and retrieve the user record
-	err = db.QueryRow("SELECT id, username, password FROM users WHERE username=? AND password=?", username, password).Scan(&user.ID, &user.Username, &user.Password)
+	// Connect to database and retrieve user record
+	user := User{}
+	err := db.Where("username = ?", username).First(&user).Error
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return User{}, errors.New("Invalid username or password")
-		}
 		return User{}, err
 	}
 
 	return user, nil
 }
+
+// validateInput checks the given username and password for invalid characters or empty values.
+// Returns an error if the input is invalid.
+func validateInput(username string, password string) error {
+	if username == "" || password == "" {
+		return errors.New("Username and password are required")
+	}
+	if containsInvalidCharacters(username) || containsInvalidCharacters(password) {
+		return errors.New("Username and password can only contain alphanumeric characters")
+	}
+	return nil
+}
+
+// containsInvalidCharacters checks the given string for invalid characters.
+// Returns true if the string contains invalid characters, and false otherwise.
+func containsInvalidCharacters(s string) bool {
+	for _, r := range s {
+		if !unicode.IsLetter(r) && !unicode.IsNumber(r) {
+			return true
+		}
+	}
+	return false
+}
+
+
 
 // Encrypt will encrypt a raw string to
 // an encrypted value
@@ -254,26 +296,22 @@ func Logout(token string) error {
 
 // VerifyToken takes in a JWT token and verifies it using the secret key.
 // It returns the claims contained in the token if the token is valid, or an error if the token is invalid or has expired.
-func VerifyToken(tokenString string) (jwt.MapClaims, error) {
+func VerifyToken(tokenString string) (*Claims, error) {
 	secret := FindSecret()
-
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		// check that the signing method is correct
+	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
+		// Check that the signing method is correct
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
-
 		return secret, nil
 	})
 	if err != nil {
 		return nil, err
 	}
-
-	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+	if claims, ok := token.Claims.(*Claims); ok && token.Valid {
 		return claims, nil
 	}
-
-	return nil, errors.New("Invalid token")
+	return nil, errors.New("Invalid JWT token")
 }
 
 func refreshToken(refreshToken string) (string, error) {
@@ -291,24 +329,6 @@ func refreshToken(refreshToken string) (string, error) {
 
   return jwtToken, nil
 }
-
-// VerifyJWT verifies a JWT token and returns the claims contained in it.
-// Returns an error if the token is invalid or if there is a problem verifying it.
-func VerifyJWT(tokenString string) (*Claims, error) {
-	secret := FindSecret()
-	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
-		return secret, nil
-	})
-	if err != nil {
-		return nil, err
-	}
-	if !token.Valid {
-		return nil, errors.New("Invalid JWT token")
-	}
-	return token.Claims.(*Claims), nil
-}
-
-
 
 // DeleteUser takes in a user ID and deletes the corresponding user record from the database.
 // Returns an error if there is a problem connecting to the database.
