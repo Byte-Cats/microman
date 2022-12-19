@@ -50,7 +50,7 @@ const (
 	invalidToken = "Invalid token"
 	secretNotSetErrorMessage        = "secret value is not set"
 	negativeExpirationErrorMessage = "expiration time is negative"
-
+)
 	
 // UserCredentialRules represents the rules for validating a user's credentials.
 type UserCredentialRules struct {
