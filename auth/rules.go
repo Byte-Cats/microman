@@ -1,16 +1,21 @@
+package auth
+
+import (
+	"errors"
+	"strings"
+	"unicode"
+)
+
 // UserCredentialRules represents the rules for validating a user's credentials.
 type UserCredentialRules struct {
-	MinUsernameLength     int
-	MaxUsernameLength     int
-	MinPasswordLength     int
-	AllowedUsernameSymbols string
+	MinUsernameLength              int
+	MaxUsernameLength              int
+	MinPasswordLength              int
+	AllowedUsernameSymbols         string
 	DisallowedUsernameStartSymbols string
 }
-	
+
 type CredentialRules UserCredentialRules
-	
-
-
 
 // containsUppercase checks if the given string contains at least one uppercase letter.
 // It returns true if the string contains an uppercase letter, or false otherwise.
@@ -98,8 +103,6 @@ func validateUserInput(username, password string, rules *UserCredentialRules) er
 	return nil
 }
 
-
-
 // IsUsernameValid checks if the given username is valid according to the rules.
 // Returns true if the username is valid, and false otherwise.
 func (r *UserCredentialRules) IsUsernameValid(username string) bool {
@@ -113,7 +116,6 @@ func (r *UserCredentialRules) IsUsernameValid(username string) bool {
 	}
 	return true
 }
-
 
 // Validate checks the user's credentials against the specified rules.
 // Returns an error if the user's credentials are invalid, and nil otherwise.

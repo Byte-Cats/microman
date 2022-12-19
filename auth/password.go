@@ -1,5 +1,13 @@
 package auth
 
+import (
+	"encoding/json"
+	"errors"
+	"net/http"
+
+	"golang.org/x/crypto/bcrypt"
+)
+
 // hashAndSaltPassword hashes and salts the given password using bcrypt.
 // Returns the hashed password as a byte slice, and any error that occurred.
 func hashAndSaltPassword(password string) ([]byte, error) {
@@ -36,7 +44,6 @@ func resetPasswordHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
-
 
 // ChangePassword takes in a user ID, the current password, and the new password and updates the user's password in the database if the current password is correct. Returns an error if the current password is incorrect or there is an error updating the password.
 func ChangePassword(userID int, currentPassword string, newPassword string) error {

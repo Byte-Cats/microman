@@ -1,13 +1,23 @@
 package auth
 
+import (
+	"bytes"
+	"crypto/aes"
+	"crypto/cipher"
+	"crypto/rand"
+	"os"
+)
+
 // Encrypt will encrypt a raw string to
 // an encrypted value
 // an encrypted value has an IV (nonce) + actual encrypted value
 // when we decrypt, we only decrypt the latter part
 func Encrypt(key []byte) ([]byte, error) {
-	secretKey := FindSecret()
+	secretKey, _ := FindSecret("SECRET", "", "", "")
 
-	block, err := aes.NewCipher(secretKey)
+	var (
+		block, err = aes.NewCipher(bytes.NewBufferString(secretKey.Value).Bytes())
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -27,13 +37,13 @@ func Encrypt(key []byte) ([]byte, error) {
 	return ciphertext, nil
 }
 
-
-
 // Decrypt will return the original value of the encrypted string
 func Decrypt(encryptedKey []byte) ([]byte, error) {
-	secretKey := FindSecret()
+	secretKey, _ := FindSecret("SECRET", "", "", "")
 
-	block, err := aes.NewCipher(secretKey)
+	var (
+		block, err = aes.NewCipher([]byte(secretKey.Value))
+	)
 
 	if err != nil {
 		return nil, err
@@ -56,8 +66,6 @@ func Decrypt(encryptedKey []byte) ([]byte, error) {
 		nil,
 	)
 }
-
-
 
 func getenv(key, defaultValue string) string {
 	if value := os.Getenv(key); value != "" {

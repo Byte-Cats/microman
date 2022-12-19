@@ -1,16 +1,24 @@
 package auth
 
-// TODO: fix imports 
+import (
+	"errors"
+	"fmt"
+	"net/http"
+	"time"
 
+	"github.com/form3tech-oss/jwt-go"
+	"github.com/gorilla/mux"
+	"github.com/urfave/negroni"
+)
 
 const (
 	// ExpirationTime is the expiration time for the JWT token in hours.
-	ExpirationTime = 72
+	ExpirationTime   = 72
 	jwtSigningMethod = jwt.SigningMethodHS256
 )
 
-func generateJWT(userID int) (token string, err error) {
-	secret := FindSecret()
+func generateJWT(userID int32) (token string, err error) {
+	secret, _ := FindSecret("SECRET", "", "", "")
 	jwtToken := jwt.New(jwt.SigningMethodHS256)
 	claims := jwtToken.Claims.(jwt.MapClaims)
 	claims["id"] = userID
@@ -18,16 +26,16 @@ func generateJWT(userID int) (token string, err error) {
 	token, err = jwtToken.SignedString(secret)
 	return
 }
-	
+
 type Claims struct {
 	ID int `json:"id"`
 	jwt.StandardClaims
-}	
+}
 
 // VerifyToken takes in a JWT token and verifies it using the secret key.
 // It returns the claims contained in the token if the token is valid, or an error if the token is invalid or has expired.
 func VerifyToken(tokenString string) (*Claims, error) {
-	secret := FindSecret()
+	secret, _ := FindSecret("SECRET", "", "", "")
 	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		// Check that the signing method is correct
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -45,21 +53,20 @@ func VerifyToken(tokenString string) (*Claims, error) {
 }
 
 func refreshToken(refreshToken string) (string, error) {
-  // Look up the user associated with the refresh token
-  user, err := getUserFromRefreshToken(refreshToken)
-  if err != nil {
-    return "", err
-  }
+	// Look up the user associated with the refresh token
+	user, err := getUserFromRefreshToken(refreshToken)
+	if err != nil {
+		return "", err
+	}
 
-  // Generate a new JWT token for the user
-  jwtToken, err := generateJWTToken(user)
-  if err != nil {
-    return "", err
-  }
+	// Generate a new JWT token for the user
+	jwtToken, err := generateJWTToken(user)
+	if err != nil {
+		return "", err
+	}
 
-  return jwtToken, nil
+	return jwtToken, nil
 }
-
 
 // InitMiddleware initializes a jwtMiddleware.JWTMiddleware instance with the given secret key.
 // This middleware can be used to secure an HTTP endpoint by passing it to the SecureEndpoint function.

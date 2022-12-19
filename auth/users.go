@@ -1,10 +1,18 @@
-	
-	
+package auth
+
+import (
+	"database/sql"
+	"errors"
+	"fmt"
+
+	"golang.org/x/crypto/bcrypt"
+)
+
 // User represents a user in the system.
 type User struct {
-    ID       int    json:"id"
-    Username string json:"username"
-    Password string json:"password"
+    ID       int32  `json:"id"`
+    Username string `json:"username"`
+    Password string `json:"password"`
     Rules *CredentialRules
 }
 
@@ -12,7 +20,18 @@ type User struct {
 // handleUserLogin processes a login request for the given username and password.
 // If the user is valid, it returns a JWT token. Otherwise, it returns an error.
 func handleUserLogin(username, password string) (string, error) {
-	if err := validateUserInput(username, password); err != nil {
+	// make rules
+	rules := &UserCredentialRules{
+		MinLength: 8,
+		MaxLength: 32,
+		MinLower: 1,
+		MinUpper: 1,
+		MinNumber: 1,
+		MinSpecial: 1,
+		AllowedSpecial: "!@#$%^&
+	}
+
+	if err := validateUserInput(username, password,rules ); err != nil {
 		return "", err
 	}
 
@@ -50,7 +69,7 @@ func Register(username, password string) error {
 	// Create the new user
 	user := User{
 		Username: username,
-		Password: hashedPassword,
+		Password: string(hashedPassword),
 	}
 	if err := createUser(user); err != nil {
 		return err
@@ -63,8 +82,7 @@ func Register(username, password string) error {
 // createUser creates a new user in the database with the given username and password.
 // Returns the ID of the new user and any error that occurred.
 func createUser(username, password string, rules *UserCredentialRules) (int, error) {
-	row := db.QueryRow("SELECT id FROM users WHERE username=?", username)
-	
+
 	err := validateUserInput(username, password, rules)
 	if err != nil {
 		return 0, err
@@ -74,7 +92,7 @@ func createUser(username, password string, rules *UserCredentialRules) (int, err
 		return 0, err
 	}
 	query := "INSERT INTO users (username, password) VALUES (?, ?)"
-	res, err := db.Exec(query, username, hashedPassword)
+	res, err := database.Exec(query, username, hashedPassword)
 	if err != nil {
 		return 0, errors.New(databaseError)
 	}
@@ -96,10 +114,10 @@ func getUserFromDB(input interface{}) (User, error) {
 	switch v := input.(type) {
 	case string:
 		// Search by username
-		err = db.Where("username = ?", v).First(&user).Error
+		err = database.Where("username = ?", v).First(&user).Error
 	case int:
 		// Search by ID
-		err = db.Where("id = ?", v).First(&user).Error
+		err = database.Where("id = ?", v).First(&user).Error
 	default:
 		return user, errors.New("Invalid input type")
 	}
@@ -120,7 +138,7 @@ func getUserFromDB(input interface{}) (User, error) {
 func DeleteUser(userID int) error {
 	// Check if the user exists
 	var user User
-	row := db.QueryRow("SELECT * FROM users WHERE id = ?", userID)
+	row := database.QueryRow("SELECT * FROM users WHERE id = ?", userID)
 	if err := row.Scan(&user.ID, &user.Username, &user.Password, &user.Rules); err != nil {
 		if err == sql.ErrNoRows {
 			return fmt.Errorf("User with ID %d not found", userID)
@@ -129,7 +147,7 @@ func DeleteUser(userID int) error {
 	}
 
 	// Delete the user
-	_, err := db.Exec("DELETE FROM users WHERE id = ?", userID)
+	_, err := database.Exec("DELETE FROM users WHERE id = ?", userID)
 	if err != nil {
 		return fmt.Errorf("Failed to delete user: %v", err)
 	}
@@ -142,7 +160,7 @@ func DeleteUser(userID int) error {
 func isUsernameTaken(username string) bool {
 	var user User
 	query := fmt.Sprintf("SELECT * FROM users WHERE username = '%s'", username)
-	if err := db.QueryRow(query).Scan(&user.ID, &user.Username, &user.Password); err != nil {
+	if err := database.QueryRow(query).Scan(&user.ID, &user.Username, &user.Password); err != nil {
 		if err == sql.ErrNoRows {
 			// The username is available
 			return false
@@ -154,48 +172,3 @@ func isUsernameTaken(username string) bool {
 	// The username is already taken
 	return true
 }
-
-
-
-
-func handleRegister(w http.ResponseWriter, r *http.Request) {
-	// Parse the request body to get the new user's username and password
-	var newUser User
-	if err := json.NewDecoder(r.Body).Decode(&newUser); err != nil {
-		http.Error(w, "Failed to parse request body", http.StatusBadRequest)
-		return
-	}
-
-	// Validate the new user's credentials
-	if err := validateCredentials(newUser.Username, newUser.Password); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	// Check if the username is already taken
-	if isUsernameTaken(newUser.Username) {
-		http.Error(w, "Username already taken", http.StatusBadRequest)
-		return
-	}
-
-	// Hash and salt the password
-	hashedPassword, err := hashAndSaltPassword(newUser.Password)
-	if err != nil {
-		http.Error(w, "Failed to hash password", http.StatusInternalServerError)
-		return
-	}
-
-	// Insert the new user into the database
-	query := fmt.Sprintf("INSERT INTO users (username, password) VALUES ('%s', '%s')", newUser.Username, hashedPassword)
-	if _, err := db.Exec(query); err != nil {
-		http.Error(w, "Failed to insert new user into database", http.StatusInternalServerError)
-		return
-	}
-
-	// Return a success response
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(map[string]string{"message": "Successfully registered new user"})
-}
-
-

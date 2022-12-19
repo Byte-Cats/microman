@@ -1,11 +1,15 @@
+package auth
 
+import (
+	"encoding/hex"
+	"errors"
+	"time"
+)
 
 type Secret struct {
-    Value string
-    ExpiresAt time.Time
+	Value     string
+	ExpiresAt time.Time
 }
-
-
 
 func FindSecret(secretEnvVar, expirationEnvVar, defaultSecret, defaultExpiration string) (*Secret, error) {
 	secretValue := getenv(secretEnvVar, defaultSecret)
@@ -27,7 +31,7 @@ func FindSecret(secretEnvVar, expirationEnvVar, defaultSecret, defaultExpiration
 	}
 
 	return &Secret{
-		Value: secretBits,
+		Value:     string(secretBits),
 		ExpiresAt: time.Now().Add(expiration),
 	}, nil
 }

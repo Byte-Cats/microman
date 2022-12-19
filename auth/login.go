@@ -1,5 +1,11 @@
+package auth
 
+import (
+	"errors"
+	"net/http"
 
+	"github.com/form3tech-oss/jwt-go"
+)
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("username")
@@ -7,10 +13,10 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Validate input
 	rules := UserCredentialRules{
-		MinUsernameLength: 3,
-		MaxUsernameLength: 20,
-		MinPasswordLength: 8,
-		AllowedUsernameSymbols: "_",
+		MinUsernameLength:              3,
+		MaxUsernameLength:              20,
+		MinPasswordLength:              8,
+		AllowedUsernameSymbols:         "_",
 		DisallowedUsernameStartSymbols: "_",
 	}
 	if err := validateInput(username, password, &rules); err != nil {
@@ -41,7 +47,6 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(token))
 }
 
-
 func logoutHandler(w http.ResponseWriter, r *http.Request) {
 	// Invalidate the session by deleting the corresponding cookie
 	http.SetCookie(w, &http.Cookie{
@@ -50,8 +55,6 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 		MaxAge: -1,
 	})
 }
-
-
 
 // Logout takes in a JWT token and invalidates it so that it can no longer be used for authentication.
 func Logout(token string) error {

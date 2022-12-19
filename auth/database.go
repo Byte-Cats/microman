@@ -1,14 +1,20 @@
+package auth
+
+import (
+	"database/sql"
+	"fmt"
+	"log"
+)
 
 var database *sql.DB
 
 func initDB() {
 	var err error
-	db, err = ConnectDB("user", "password", "localhost", "3306", "auth")
+	database, err = ConnectDB("user", "password", "localhost", "3306", "auth")
 	if err != nil {
 		log.Fatal(err)
 	}
 }
-	
 
 func ConnectDB(user, password, host, port, dbname string) (*sql.DB, error) {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", user, password, host, port, dbname)
@@ -24,11 +30,6 @@ func ConnectDB(user, password, host, port, dbname string) (*sql.DB, error) {
 	return database, nil
 }
 
-
 func CloseDB(db *sql.DB) error {
 	return db.Close()
 }
-	
-
-
-

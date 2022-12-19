@@ -1,6 +1,3 @@
-# github.com/auth0/go-jwt-middleware v1.0.1
-## explicit; go 1.14
-github.com/auth0/go-jwt-middleware
 # github.com/form3tech-oss/jwt-go v3.2.5+incompatible
 ## explicit
 github.com/form3tech-oss/jwt-go
@@ -10,3 +7,7 @@ github.com/gorilla/mux
 # github.com/urfave/negroni v1.0.0
 ## explicit
 github.com/urfave/negroni
+# golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2
+## explicit
+golang.org/x/crypto/bcrypt
+golang.org/x/crypto/blowfish
