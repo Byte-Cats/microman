@@ -124,8 +124,13 @@ func FindSecret(secretEnvVar, expirationEnvVar, defaultSecret, defaultExpiration
 		return nil, errors.New(negativeExpirationErrorMessage)
 	}
 
+	secretBits, err := hex.DecodeString(secretValue)
+	if err != nil {
+		return nil, err
+	}
+
 	return &Secret{
-		Value: secretValue,
+		Value: secretBits,
 		ExpiresAt: time.Now().Add(expiration),
 	}, nil
 }
