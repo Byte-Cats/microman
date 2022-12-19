@@ -1,4 +1,13 @@
 package auth
+//TODO: break this up into files
+
+//     "constants.go"
+//     "rules.go"
+//     "secrets.go"
+//     "users.go"
+//     "database.go"
+//     "jwt.go"
+//     "password.go"
 
 import (
 	"database/sql"
@@ -6,10 +15,17 @@ import (
 	"fmt"
 	"os"
 	"time"
+	"encoding/hex"
+	"log"
+	"strings"
 
-	"github.com/dgrijalva/jwt-go"
+	jwtMiddleware "github.com/auth0/go-jwt-middleware"
+	"github.com/form3tech-oss/jwt-go"
+	"github.com/gorilla/mux"
+	"github.com/urfave/negroni"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
+
 )
 
 const (
@@ -684,4 +700,29 @@ func getenv(key, defaultValue string) string {
 		return value
 	}
 	return defaultValue
+}
+
+
+// InitMiddleware initializes a jwtMiddleware.JWTMiddleware instance with the given secret key.
+// This middleware can be used to secure an HTTP endpoint by passing it to the SecureEndpoint function.
+func InitMiddleware(secret []byte) *jwtMiddleware.JWTMiddleware {
+	middleware := jwtMiddleware.New(jwtMiddleware.Options{
+		ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
+			return secret, nil
+		},
+		SigningMethod: jwt.SigningMethodHS256,
+		Extractor:     jwtMiddleware.FromFirst(jwtMiddleware.FromAuthHeader),
+	})
+	return middleware
+}
+
+// SecureEndpoint secures an HTTP endpoint with the given middleware.
+// When a request is made to this endpoint, the middleware will check for a valid JWT in the request header
+// and call the handler function if the JWT is valid.
+// If the JWT is invalid or not present, the middleware will return an error to the client.
+func SecureEndpoint(path string, middleware *jwtMiddleware.JWTMiddleware, handler http.HandlerFunc, router *mux.Router) {
+	router.Handle(path, negroni.New(
+		negroni.HandlerFunc(middleware.HandlerWithNext),
+		negroni.Wrap(http.HandlerFunc(handler)),
+	))
 }
