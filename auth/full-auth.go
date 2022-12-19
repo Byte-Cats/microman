@@ -135,28 +135,30 @@ func (u *User) Validate(rules *UserCredentialRules) error {
 	return nil
 }
 
-// ValidateUserCredentials checks the given username and password against the specified rules.
-// Returns an error if either the username or password is invalid, and nil otherwise.
-func (r *UserCredentialRules) ValidateUserCredentials(username string, password string) error {
-	if len(username) < r.MinUsernameLength || len(username) > r.MaxUsernameLength {
-		return fmt.Errorf("Username must be between %d and %d characters long", r.MinUsernameLength, r.MaxUsernameLength)
+// validateInput checks the given input for various validation rules.
+// Returns an error if any of the checks fail.
+func validateInput(username string, password string) error {
+	// Check username length
+	if len(username) < minUsernameLength || len(username) > maxUsernameLength {
+		return errors.New("Username must be between 6 and 20 characters")
 	}
-	if len(password) < r.MinPasswordLength {
-		return fmt.Errorf("Password must be at least %d characters long", r.MinPasswordLength)
+
+	// Check password length
+	if len(password) < minPasswordLength {
+		return errors.New("Password must be at least 8 characters")
 	}
-	if !r.IsUsernameValid(username) {
-		return errors.New("Username must contain only letters, numbers, and thefollowing symbols: " + r.AllowedUsernameSymbols)
-}
-return nil
-}
 
+	// Check allowed username symbols
+	if !strings.ContainsAny(username, allowedUsernameSymbols) {
+		return errors.New("Username can only contain letters, numbers, and the following symbols: . @ _")
+	}
 
+	// Check disallowed username start symbols
+	if strings.ContainsAny(string(username[0]), disallowedUsernameStartSymbols) {
+		return errors.New("Username cannot start with a symbol")
+	}
 
-
-// Validate checks the username and password of the user against the specified rules.
-// Returns an error if either the username or password is invalid, and nil otherwise.
-func (u *User) Validate() error {
-return u.Rules.ValidateUserCredentials(u.Username, u.Password)
+	return nil
 }
 
 // IsUsernameValid checks if the given username is valid according to the rules.
