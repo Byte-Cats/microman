@@ -157,3 +157,45 @@ func isUsernameTaken(username string) bool {
 
 
 
+
+func handleRegister(w http.ResponseWriter, r *http.Request) {
+	// Parse the request body to get the new user's username and password
+	var newUser User
+	if err := json.NewDecoder(r.Body).Decode(&newUser); err != nil {
+		http.Error(w, "Failed to parse request body", http.StatusBadRequest)
+		return
+	}
+
+	// Validate the new user's credentials
+	if err := validateCredentials(newUser.Username, newUser.Password); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// Check if the username is already taken
+	if isUsernameTaken(newUser.Username) {
+		http.Error(w, "Username already taken", http.StatusBadRequest)
+		return
+	}
+
+	// Hash and salt the password
+	hashedPassword, err := hashAndSaltPassword(newUser.Password)
+	if err != nil {
+		http.Error(w, "Failed to hash password", http.StatusInternalServerError)
+		return
+	}
+
+	// Insert the new user into the database
+	query := fmt.Sprintf("INSERT INTO users (username, password) VALUES ('%s', '%s')", newUser.Username, hashedPassword)
+	if _, err := db.Exec(query); err != nil {
+		http.Error(w, "Failed to insert new user into database", http.StatusInternalServerError)
+		return
+	}
+
+	// Return a success response
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]string{"message": "Successfully registered new user"})
+}
+
+
