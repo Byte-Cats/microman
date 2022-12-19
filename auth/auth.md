@@ -1,3 +1,11 @@
+i'm trying to split up the big auth file into smaller files starting with users.go
+
+can you help me extract a reasonable user.go from using all the relevant functions?
+
+assume there is a constants.go and rules.go and database.go and jwt.go and password.go and secrets.go and crypto.go and login.go
+
+
+
 # Auth System
 
 The "auth" package is a comprehensive and futuristic solution for handling user authentication in your application. It includes features such as configurable password rules, secure storage of secrets, and generation of JWT tokens for authorized user access. With its ability to connect to a database and seamlessly integrate with popular libraries like Negroni and Gorilla Mux, this package is the perfect choice for ensuring secure and hassle-free user authentication in your project.
