@@ -1,5 +1,7 @@
 # Auth System
 
+The "auth" package is a comprehensive and futuristic solution for handling user authentication in your application. It includes features such as configurable password rules, secure storage of secrets, and generation of JWT tokens for authorized user access. With its ability to connect to a database and seamlessly integrate with popular libraries like Negroni and Gorilla Mux, this package is the perfect choice for ensuring secure and hassle-free user authentication in your project.
+
 This auth system is designed to provide secure user registration and login functionality, using bcrypt to hash and salt passwords and JWT tokens to authenticate users. It also includes validation checks to ensure that user input meets certain criteria, and a database connection to store and retrieve user records. With this system in place, you can confidently manage user access to your application and keep your users' data safe and secure.
 
 ### Features
