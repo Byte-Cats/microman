@@ -1,3 +1,23 @@
+# Auth System
+
+This auth system is designed to provide secure user registration and login functionality, using bcrypt to hash and salt passwords and JWT tokens to authenticate users. 
+
+It also includes validation checks to ensure that user input meets certain criteria, and a database connection to store and retrieve user records. With this system in place, you can confidently manage user access to your application and keep your users' data safe and secure.
+
+### Features 
+
+    User registration: The handleCreateUser function processes requests to create new users, by validating the provided username and password, checking to see if the username is already in use, hashing and salting the password, and creating a new user record in the database.
+
+    User login: The handleUserLogin function processes login requests, by validating the provided username and password and retrieving the corresponding user record from the database. If the login is successful, it generates a JWT token for the user.
+
+    Password hashing and salting: The hashAndSaltPassword function hashes and salts the given password using bcrypt.
+
+    JWT token generation: The generateJWT function generates a JWT token for the given user ID, using the HMAC-SHA256 signing method.
+
+    Validation of user input: The validateInput function checks the given input (username and password) for various validation rules, such as minimum and maximum length, allowed symbols, and disallowed start symbols.
+
+    Retrieval of user records from the database: The getUserFromDB function retrieves a user record from the database by either their username or their ID.
+
 # Jwt Middleware
 This package provides functionality for securing HTTP endpoints with JSON Web Tokens (JWTs) in a Go web application. It uses the jwt-go and go-jwt-middleware libraries to handle JWT validation and signing.
 
