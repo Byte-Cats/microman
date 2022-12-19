@@ -14,11 +14,22 @@ const (
 	ExpirationTime = 72
 )
 
+// UserCredentialRules represents the rules for validating a user's credentials.
+type UserCredentialRules struct {
+    MinUsernameLength int
+    MaxUsernameLength int
+    MinPasswordLength int
+    AllowedUsernameSymbols string
+    DisallowedUsernameStartSymbols string
+}
+
+// User represents a user in the system.
 // User represents a user in the system.
 type User struct {
-	ID       int    `json:"id"`
-	Username string `json:"username"`
-	Password string `json:"password"`
+    ID       int    json:"id"
+    Username string json:"username"
+    Password string json:"password"
+    Rules *UserCredentialRules
 }
 
 type Claims struct {
@@ -26,14 +37,7 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-// UserCredentialRules represents the rules for validating a user's credentials.
-type UserCredentialRules struct {
-	MinUsernameLength int
-	MaxUsernameLength int
-	MinPasswordLength int
-	AllowedUsernameSymbols string
-	DisallowedUsernameStartSymbols string
-}
+
 
 // generateJWT generates a JWT token for the given user ID.
 // It returns the JWT token as a string, and any error that occurred.
@@ -97,44 +101,26 @@ return err
 }
 
 
-// getUserFromDB retrieves a user record from the database by username and password.
+// getUserFromDB retrieves a user record from the database by either their username or their ID.
 // Returns an error if no matching record is found, if there is a problem connecting to the database,
 // or if the input is invalid.
-func getUserFromDB(username string, password string) (User, error) {
-	// Validate input
-	if err := validateInput(username, password); err != nil {
-		return User{}, err
-	}
-
-	// Connect to database and retrieve user record
+func getUserFromDB(input interface{}) (User, error) {
 	user := User{}
-	err := db.Where("username = ?", username).First(&user).Error
-	if err != nil {
-		return User{}, errors.New("Invalid username or password")
+	var err error
+
+	switch v := input.(type) {
+	case string:
+		// Search by username
+		err = db.Where("username = ?", v).First(&user).Error
+	case int:
+		// Search by ID
+		err = db.Where("id = ?", v).First(&user).Error
+	default:
+		return User{}, errors.New("Invalid input type")
 	}
 
-	// Check password
-	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil {
-		return User{}, errors.New("Invalid username or password")
-	}
-
-	return user, nil
-}
-
-// getUserFromDBByUsername retrieves a user record from the database by username.
-// Returns an error if no matching record is found, or if there is a problem connecting to the database.
-func getUserFromDBByUsername(username string) (User, error) {
-	// Validate input
-	if err := validateInput(username, ""); err != nil {
-		return User{}, err
-	}
-
-	// Connect to database and retrieve user record
-	user := User{}
-	err := db.Where("username = ?", username).First(&user).Error
-	if err != nil {
-		return User{}, err
+		return User{}, errors.New("No matching user found")
 	}
 
 	return user, nil
@@ -165,13 +151,7 @@ return nil
 }
 
 
-// User represents a user in the system.
-type User struct {
-ID int json:"id"
-Username string json:"username"
-Password string json:"password"
-Rules *UserCredentialRules
-}
+
 
 // Validate checks the username and password of the user against the specified rules.
 // Returns an error if either the username or password is invalid, and nil otherwise.
@@ -408,8 +388,8 @@ if err := handleCreateUser(request.Username, request.Password); err != nil {
 	http.Error(w, err.Error(), http.StatusInternalServerError)
 	return
 }
-	
-	
+
+
 
 // Decrypt will return the original value of the encrypted string
 func Decrypt(encryptedKey []byte) ([]byte, error) {
@@ -550,3 +530,190 @@ func DeleteUser(userID int) error {
 	return nil
 }
 
+// do not use gorm for anything only use standard packages
+
+func (s *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
+	var user User
+
+	// decode request body
+	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	// validate request body
+	if err := user.Validate(); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// check if user already exists
+	if err := s.db.Where("username = ?", user.Username).First(&User{}).Error; err != gorm.ErrRecordNotFound {
+		http.Error(w, "User already exists", http.StatusBadRequest)
+		return
+	}
+
+	// create user
+	if err := s.db.Create(&user).Error; err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// generate JWT token
+	token, err := generateJWTToken(user)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// return response
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(map[string]string{"token": token})
+}
+
+func (s *Server) Login(w http.ResponseWriter, r *http.Request) {
+	var user User
+
+	// decode request body
+	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	// validate request body
+	if err := user.Validate(); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// check if user exists
+	if err := s.db.Where("username = ?", user.Username).First(&user).Error; err != nil {
+		http.Error(w, "User does not exist", http.StatusBadRequest)
+		return
+	}
+
+	// check if password is correct
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(user.Password)); err != nil {
+		http.Error(w, "Incorrect password", http.StatusBadRequest)
+		return
+	}
+
+	// generate JWT token
+	token, err := generateJWTToken(user)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// return response
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]string{"token": token})
+}
+
+func (s *Server) RefreshToken(w http.ResponseWriter, r *http.Request) {
+	// get refresh token from request body
+	var refreshToken RefreshToken
+	if err := json.NewDecoder(r.Body).Decode(&refreshToken); err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	// generate new JWT token
+	token, err := refreshToken(refreshToken.Token)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// return response
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]string{"token": token})
+}
+
+func (s *Server) Logout(w http.ResponseWriter, r *http.Request) {
+	// get token from request header
+	tokenString := r.Header.Get("Authorization") // "Bearer <token>"
+	tokenString = strings.TrimPrefix(tokenString, "Bearer ")
+
+	// invalidate token
+	if err := invalidateToken(tokenString); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// return response
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]string{"message": "Successfully logged out"})
+}
+
+func (s *Server) GetUser(w http.ResponseWriter, r *http.Request) {
+	// get token from request header
+	tokenString := r.Header.Get("Authorization") // "Bearer
+	tokenString = strings.TrimPrefix(tokenString, "Bearer ")
+
+	// get user from token
+	user, err := getUserFromToken(tokenString)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// return response
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(user)
+}
+
+func (s *Server) DeleteUser(w http.ResponseWriter, r *http.Request) {
+	// get token from request header
+	tokenString := r.Header.Get
+	tokenString = strings.TrimPrefix(tokenString, "Bearer ")
+
+	// get user from token
+	user, err := getUserFromToken(tokenString)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// delete user
+	if err := s.db.Delete(&user).Error; err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+func (s *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
+	// get token from request header
+	tokenString := r.Header.Get("Authorization") // "Bearer
+	tokenString = strings.TrimPrefix(tokenString, "Bearer ")
+
+	// get user from token
+	user, err := getUserFromToken(tokenString)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// decode request body
+	var updatedUser User
+	if err := json.NewDecoder(r.Body).Decode(&updatedUser); err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	// update user
+	if err := s.db.Model(&user).Updates(updatedUser).Error; err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// return response
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(user)
+}
