@@ -48,11 +48,11 @@ Table of contents
 - [x] Sub-routing
 - [x] Logging System
 - [x] Redirect
-- [ ] JWT Ready
+- [x] JWT Ready
 - [ ] Auto Generated Api Docs
 - [ ] Example Database Use
 - [ ] Test Automation
-- [ ] Users
+- [x] Users
 - [ ] Authentication
 - [ ] Poggy Build Scripts
 - [ ] Sexier Documentation (More readme's EVERYWHERE???)
