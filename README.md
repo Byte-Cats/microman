@@ -54,8 +54,8 @@ Table of contents
 - [ ] Test Automation
 - [x] Users
 - [ ] Authentication
-- [ ] Poggy Build Scripts
-- [ ] Sexier Documentation (More readme's EVERYWHERE???)
+- [x] Poggy Build Scripts
+- [x] Sexier Documentation (More readme's EVERYWHERE???)
 
 ### Integration
 - [x] Github Actions
