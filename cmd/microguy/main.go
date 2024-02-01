@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	al "github.com/byte-cats/microman/app"
+	app "github.com/byte-cats/microman/app"
 )
 
 // Init Example startup usage of microman Api
@@ -13,7 +13,7 @@ func Init() {
 
 	// Starting the server
 	log.Println("Initializing " + al.GetTitle(api) + "...")
-	al.RunDefaultClient(api)
+	app.RunDefaultClient(api)
 }
 
 // main is the entry point for the micro-guy application.
