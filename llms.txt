@@ -2,7 +2,7 @@
 
 > A minimal Go HTTP API starter kit built without a web framework — just `net/http`, `gorilla/mux` for routing, and `urfave/negroni` for middleware. It's a scaffold/example project, not a production service.
 
-Module path: `github.com/byte-cats/microman` (GitHub: `Byte-Cats/microman`, note the casing difference). Call chain: `cmd/microguy/main.go` → `app` → `server` → `handlers`, with `auth`, `data`, and `log` as supporting packages. Most REST handlers (`/get`, `/add`, `/edit`, `/delete`) are still stub responses rather than real database-backed logic, and user registration/removal under `/auth/*` return `501 Not Implemented`. JWT login and a JWT-protected route (`/auth/me`) are real and working. `go build ./...`, `go vet ./...`, and `go test ./...` currently pass clean.
+Module path: `github.com/byte-cats/microman` (GitHub: `Byte-Cats/microman`, note the casing difference). Call chain: `cmd/microguy/main.go` → `app` → `server` → `handlers`, with `auth`, `data`, and `log` as supporting packages. Most REST handlers (`/get`, `/add`, `/edit`, `/delete`) are still stub responses rather than real database-backed logic. JWT login, a JWT-protected route (`/auth/me`), and user registration/removal under `/auth/*` (`POST /auth/user/new`, `POST /auth/user/remove`, the latter JWT-protected and self-only) are real and working. `go build ./...`, `go vet ./...`, and `go test ./...` currently pass clean.
 
 ## Getting Started
 
@@ -22,7 +22,7 @@ Module path: `github.com/byte-cats/microman` (GitHub: `Byte-Cats/microman`, note
 
 ## Authentication
 
-- [auth/auth.md](auth/auth.md): The `auth` package — JWT issuing/verification (`jwt.go`, `golang-jwt/jwt/v5`), the negroni-based `JWTMiddleware` (`middleware.go`), bcrypt password hashing (`password.go`), input validation rules (`rules.go`), and `route.go`'s `AuthRoute`, which mounts `POST /auth/login` (public), `GET /auth/me` (JWT-protected, echoes verified claims), and the honest `501` stubs `POST /auth/user/new` / `POST /auth/user/remove`.
+- [auth/auth.md](auth/auth.md): The `auth` package — JWT issuing/verification (`jwt.go`, `golang-jwt/jwt/v5`), the negroni-based `JWTMiddleware` (`middleware.go`), bcrypt password hashing (`password.go`), input validation rules (`rules.go`), user CRUD (`users.go`'s `CreateUser`/`FindUserByUsername`/`RemoveUser`), the `users` table schema (`schema.sql`), and `route.go`'s `AuthRoute`, which mounts `POST /auth/login` (public), `GET /auth/me` (JWT-protected, echoes verified claims), `POST /auth/user/new` (public), and `POST /auth/user/remove` (JWT-protected, self-only).
 
 ## Deployment & CI
 

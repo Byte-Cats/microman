@@ -13,6 +13,7 @@ const (
 	queryError                     = "Query error"
 	queryNoRows                    = "Query returned no rows"
 	usernameTaken                  = "Username already taken"
+	userNotFound                   = "User not found"
 	incorrectPassword              = "Incorrect password"
 	unauthorized                   = "Unauthorized"
 	invalidToken                   = "Invalid token"
