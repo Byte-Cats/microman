@@ -3,10 +3,10 @@ kind: Service
 metadata:
   name: service
 spec:
-  type: NodePort  
+  type: NodePort
   ports:
   - name: http
     port: 80
-    targetPort: 3000
+    targetPort: 6969
   selector:
-    name: deployment
+    name: microman
