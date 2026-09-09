@@ -18,6 +18,7 @@ func InitRoutes(router *mux.Router) {
 	router.HandleFunc("/home", handlers.Home)
 	router.HandleFunc("/docs", handlers.Docs)
 	router.HandleFunc("/info", handlers.InfoDealer)
+	router.HandleFunc("/health", handlers.Health)
 	// Auth endpoints
 	router.HandleFunc("/auth/login", handlers.Get)
 	router.HandleFunc("/auth/user/new", handlers.Get)
