@@ -2,6 +2,7 @@ package server
 
 import (
 	"github.com/byte-cats/microman/auth"
+	"github.com/byte-cats/microman/docs"
 	"github.com/byte-cats/microman/handlers"
 	"github.com/gorilla/mux"
 )
@@ -20,6 +21,7 @@ func InitRoutes(router *mux.Router) {
 	router.HandleFunc("/docs", handlers.Docs)
 	router.HandleFunc("/info", handlers.InfoDealer)
 	router.HandleFunc("/health", handlers.Health)
+	docs.RegisterSwaggerRoute(router)
 	// Auth endpoints
 	auth.AuthRoute(router)
 

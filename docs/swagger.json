@@ -1,0 +1,218 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Minimal Go HTTP API starter kit (no web framework) built on net/http and gorilla/mux. Most routes are still stub handlers; see the /docs endpoint and each handler's doc comment for the actual current behavior.",
+        "title": "Microman API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "Byte Cats",
+            "url": "https://github.com/Byte-Cats/microman"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://github.com/Byte-Cats/microman/blob/main/LICENCE"
+        },
+        "version": "0.420.69"
+    },
+    "host": "localhost:6969",
+    "basePath": "/",
+    "paths": {
+        "/": {
+            "get": {
+                "description": "Redirects the client from the root path to /docs with a 303 See Other.",
+                "tags": [
+                    "general"
+                ],
+                "summary": "Redirect to docs",
+                "responses": {
+                    "303": {
+                        "description": "redirect to /docs",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/add": {
+            "post": {
+                "description": "Stub handler that is meant to add something to the database; currently builds a placeholder struct, JSON-encodes it via data.JsonConvert, and writes it back. The route is registered without a method restriction, so it currently responds to any HTTP method.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "rest"
+                ],
+                "summary": "Add a resource",
+                "responses": {
+                    "200": {
+                        "description": "placeholder JSON payload",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "get": {
+                "description": "Stub handler that is meant to fetch something from the database based on the request; currently just writes a fixed string. Also currently reused (as-is) for /auth/login, /auth/user/new and /auth/user/remove.",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "rest"
+                ],
+                "summary": "Get a resource",
+                "responses": {
+                    "200": {
+                        "description": "Getting something from database",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/user/new": {
+            "get": {
+                "description": "Stub handler that is meant to fetch something from the database based on the request; currently just writes a fixed string. Also currently reused (as-is) for /auth/login, /auth/user/new and /auth/user/remove.",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "rest"
+                ],
+                "summary": "Get a resource",
+                "responses": {
+                    "200": {
+                        "description": "Getting something from database",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/delete": {
+            "delete": {
+                "description": "Stub handler that is meant to delete something from the database; currently just writes a fixed string. The route is registered without a method restriction, so it currently responds to any HTTP method.",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "rest"
+                ],
+                "summary": "Delete a resource",
+                "responses": {
+                    "200": {
+                        "description": "Something is going to be deleted",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/docs": {
+            "get": {
+                "description": "Writes a fixed \"Docs\" string. Real interactive API docs are served separately by the Swagger UI mounted at /swagger/.",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "general"
+                ],
+                "summary": "Docs placeholder",
+                "responses": {
+                    "200": {
+                        "description": "Docs",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/edit": {
+            "put": {
+                "description": "Stub handler that is meant to edit something in the database; currently just writes a fixed string. The route is registered without a method restriction, so it currently responds to any HTTP method.",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "rest"
+                ],
+                "summary": "Edit a resource",
+                "responses": {
+                    "200": {
+                        "description": "Something is going to be edited",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/get": {
+            "get": {
+                "description": "Stub handler that is meant to fetch something from the database based on the request; currently just writes a fixed string. Also currently reused (as-is) for /auth/login, /auth/user/new and /auth/user/remove.",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "rest"
+                ],
+                "summary": "Get a resource",
+                "responses": {
+                    "200": {
+                        "description": "Getting something from database",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/home": {
+            "get": {
+                "description": "Writes a fixed welcome message for the microman API and logs the request.",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "general"
+                ],
+                "summary": "Home page",
+                "responses": {
+                    "200": {
+                        "description": "welcome message",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/info": {
+            "get": {
+                "description": "Writes a fixed informational string describing this endpoint.",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "general"
+                ],
+                "summary": "Info page",
+                "responses": {
+                    "200": {
+                        "description": "info string",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
