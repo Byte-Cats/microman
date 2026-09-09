@@ -1,10 +1,9 @@
 package auth
 
 import (
-	"errors"
 	"net/http"
 
-	"github.com/form3tech-oss/jwt-go"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
@@ -19,26 +18,26 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		AllowedUsernameSymbols:         "_",
 		DisallowedUsernameStartSymbols: "_",
 	}
-	if err := validateInput(username, password, &rules); err != nil {
+	if err := validateUserInput(username, password, &rules); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	// Get user from database
-	user, err := getUserFromDBByUsername(username)
+	user, err := FindUserByUsername(username)
 	if err != nil {
 		http.Error(w, "Invalid username or password", http.StatusUnauthorized)
 		return
 	}
 
 	// Compare password hash
-	if err := comparePasswordHash(user.Password, password); err != nil {
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
 		http.Error(w, "Invalid username or password", http.StatusUnauthorized)
 		return
 	}
 
 	// Generate JWT token
-	token, err := generateJWT(user.ID)
+	token, err := generateJWT(int32(user.ID))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -54,29 +53,4 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 		Value:  "",
 		MaxAge: -1,
 	})
-}
-
-// Logout takes in a JWT token and invalidates it so that it can no longer be used for authentication.
-func Logout(token string) error {
-	// parse token to get claims
-	parsedToken, err := jwt.Parse(token, func(t *jwt.Token) (interface{}, error) {
-		return FindSecret(), nil
-	})
-	if err != nil {
-		return err
-	}
-	claims := parsedToken.Claims.(jwt.MapClaims)
-
-	// get user ID from claims
-	userID, ok := claims["id"].(float64)
-	if !ok {
-		return errors.New("Invalid token")
-	}
-
-	// invalidate token in database
-	if err := invalidateTokenInDB(int(userID)); err != nil {
-		return err
-	}
-
-	return nil
 }

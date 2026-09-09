@@ -1,10 +1,10 @@
 module github.com/byte-cats/microman
 
-go 1.18
+go 1.26.0
 
 require (
-	github.com/form3tech-oss/jwt-go v3.2.5+incompatible
-	github.com/gorilla/mux v1.8.0
-	github.com/urfave/negroni v1.0.0
-	golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2
+	github.com/gorilla/mux v1.8.1
+	golang.org/x/crypto v0.57.0
 )
+
+require github.com/golang-jwt/jwt/v5 v5.3.1

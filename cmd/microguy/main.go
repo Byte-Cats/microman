@@ -9,10 +9,10 @@ import (
 // Init Example startup usage of microman Api
 func Init() {
 	// Creating a new api instance
-	api := al.DefaultAPIClient()
+	api := app.DefaultAPIClient()
 
 	// Starting the server
-	log.Println("Initializing " + al.GetTitle(api) + "...")
+	log.Println("Initializing " + app.GetTitle(api) + "...")
 	app.RunDefaultClient(api)
 }
 

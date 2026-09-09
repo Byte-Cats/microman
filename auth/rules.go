@@ -109,8 +109,8 @@ func (r *UserCredentialRules) IsUsernameValid(username string) bool {
 	if len(r.DisallowedUsernameStartSymbols) > 0 && strings.ContainsRune(r.DisallowedUsernameStartSymbols, rune(username[0])) {
 		return false
 	}
-	for _, r := range username {
-		if !unicode.IsLetter(r) && !unicode.IsNumber(r) && !strings.ContainsRune(r.AllowedUsernameSymbols, r) {
+	for _, c := range username {
+		if !unicode.IsLetter(c) && !unicode.IsNumber(c) && !strings.ContainsRune(r.AllowedUsernameSymbols, c) {
 			return false
 		}
 	}
@@ -120,8 +120,5 @@ func (r *UserCredentialRules) IsUsernameValid(username string) bool {
 // Validate checks the user's credentials against the specified rules.
 // Returns an error if the user's credentials are invalid, and nil otherwise.
 func (u *User) Validate(rules *UserCredentialRules) error {
-	if err := rules.ValidateUserCredentials(u.Username, u.Password); err != nil {
-		return err
-	}
-	return nil
+	return validateUserInput(u.Username, u.Password, rules)
 }
