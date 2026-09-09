@@ -26,8 +26,8 @@ func InitRoutes(router *mux.Router) {
 	auth.AuthRoute(router)
 
 	// Rest endpoints
-	router.HandleFunc("/get", handlers.Get)
-	router.HandleFunc("/add", handlers.Adder)
-	router.HandleFunc("/edit", handlers.Editor)
-	router.HandleFunc("/delete", handlers.Deleter)
+	router.HandleFunc("/get", handlers.Get).Methods("GET")
+	router.HandleFunc("/add", handlers.Adder).Methods("POST")
+	router.HandleFunc("/edit", handlers.Editor).Methods("PUT")
+	router.HandleFunc("/delete", handlers.Deleter).Methods("DELETE")
 }
