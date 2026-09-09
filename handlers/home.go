@@ -14,7 +14,7 @@ func HomeSecrets() string {
 // Home there's no place like it apparently
 func Home(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(200)
-	_, err := fmt.Fprintf(w, HomeSecrets())
+	_, err := fmt.Fprint(w, HomeSecrets())
 	if err != nil {
 		return
 	}

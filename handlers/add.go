@@ -18,9 +18,5 @@ func Adder(w http.ResponseWriter, r *http.Request) {
 		ok:   1,
 	}
 	cont, _ := data.JsonConvert(d)
-	_, err := w.Write([]byte(cont))
-	if err != nil {
-		return
-	}
-
+	writeString(w, cont)
 }
