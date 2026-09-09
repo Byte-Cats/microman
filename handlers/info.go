@@ -11,7 +11,13 @@ func Informant() string {
 	return "This is the info function"
 }
 
-// InfoDealer string to http response
+// InfoDealer godoc
+// @Summary Info page
+// @Description Writes a fixed informational string describing this endpoint.
+// @Tags general
+// @Produce plain
+// @Success 200 {string} string "info string"
+// @Router /info [get]
 func InfoDealer(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Handling a request with a method \"%v\" and url \"%v\"", r.Method, r.URL.Path)
 	_, err := w.Write([]byte(Informant()))
