@@ -50,7 +50,7 @@ Table of contents
 - [x] Redirect
 - [x] JWT Ready
 - [ ] Auto Generated Api Docs
-- [ ] Example Database Use
+- [x] Example Database Use
 - [ ] Test Automation
 - [x] Users
 - [ ] Authentication

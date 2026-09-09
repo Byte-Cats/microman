@@ -42,57 +42,43 @@ const docTemplate = `{
         },
         "/add": {
             "post": {
-                "description": "Stub handler that is meant to add something to the database; currently builds a placeholder struct, JSON-encodes it via data.JsonConvert, and writes it back. The route is registered without a method restriction, so it currently responds to any HTTP method.",
+                "description": "Creates a new row in the items table (see data/schema.sql) from a JSON body and returns the created item, including its generated id. Real MySQL-backed CRUD via the data package, demonstrating database wiring rather than a stub response.",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "rest"
                 ],
-                "summary": "Add a resource",
-                "responses": {
-                    "200": {
-                        "description": "placeholder JSON payload",
+                "summary": "Add an item",
+                "parameters": [
+                    {
+                        "description": "Item to create",
+                        "name": "item",
+                        "in": "body",
+                        "required": true,
                         "schema": {
-                            "type": "object"
+                            "$ref": "#/definitions/handlers.AddRequest"
                         }
                     }
-                }
-            }
-        },
-        "/auth/login": {
-            "get": {
-                "description": "Stub handler that is meant to fetch something from the database based on the request; currently just writes a fixed string. Also currently reused (as-is) for /auth/login, /auth/user/new and /auth/user/remove.",
-                "produces": [
-                    "text/plain"
                 ],
-                "tags": [
-                    "rest"
-                ],
-                "summary": "Get a resource",
                 "responses": {
-                    "200": {
-                        "description": "Getting something from database",
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/data.Item"
+                        }
+                    },
+                    "400": {
+                        "description": "invalid request body",
                         "schema": {
                             "type": "string"
                         }
-                    }
-                }
-            }
-        },
-        "/auth/user/new": {
-            "get": {
-                "description": "Stub handler that is meant to fetch something from the database based on the request; currently just writes a fixed string. Also currently reused (as-is) for /auth/login, /auth/user/new and /auth/user/remove.",
-                "produces": [
-                    "text/plain"
-                ],
-                "tags": [
-                    "rest"
-                ],
-                "summary": "Get a resource",
-                "responses": {
-                    "200": {
-                        "description": "Getting something from database",
+                    },
+                    "500": {
+                        "description": "database error",
                         "schema": {
                             "type": "string"
                         }
@@ -102,17 +88,44 @@ const docTemplate = `{
         },
         "/delete": {
             "delete": {
-                "description": "Stub handler that is meant to delete something from the database; currently just writes a fixed string. The route is registered without a method restriction, so it currently responds to any HTTP method.",
+                "description": "Deletes the row in the items table (see data/schema.sql) identified by the ` + "`" + `id` + "`" + ` query parameter and confirms deletion as JSON. Real MySQL-backed CRUD via the data package, demonstrating database wiring rather than a stub response.",
                 "produces": [
-                    "text/plain"
+                    "application/json"
                 ],
                 "tags": [
                     "rest"
                 ],
-                "summary": "Delete a resource",
+                "summary": "Delete an item",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Item id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Something is going to be deleted",
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.DeleteResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "missing or invalid id",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "item not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "database error",
                         "schema": {
                             "type": "string"
                         }
@@ -142,17 +155,56 @@ const docTemplate = `{
         },
         "/edit": {
             "put": {
-                "description": "Stub handler that is meant to edit something in the database; currently just writes a fixed string. The route is registered without a method restriction, so it currently responds to any HTTP method.",
+                "description": "Updates the name/value of the row in the items table (see data/schema.sql) identified by the ` + "`" + `id` + "`" + ` query parameter, from a JSON body, and returns the updated item. Real MySQL-backed CRUD via the data package, demonstrating database wiring rather than a stub response.",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
-                    "text/plain"
+                    "application/json"
                 ],
                 "tags": [
                     "rest"
                 ],
-                "summary": "Edit a resource",
+                "summary": "Edit an item",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Item id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "Fields to update",
+                        "name": "item",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handlers.EditRequest"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Something is going to be edited",
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/data.Item"
+                        }
+                    },
+                    "400": {
+                        "description": "missing/invalid id or request body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "item not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "database error",
                         "schema": {
                             "type": "string"
                         }
@@ -162,17 +214,44 @@ const docTemplate = `{
         },
         "/get": {
             "get": {
-                "description": "Stub handler that is meant to fetch something from the database based on the request; currently just writes a fixed string. Also currently reused (as-is) for /auth/login, /auth/user/new and /auth/user/remove.",
+                "description": "Fetches a single row from the items table (see data/schema.sql) by its id, passed as the ` + "`" + `id` + "`" + ` query parameter, and returns it as JSON. Real MySQL-backed CRUD via the data package, demonstrating database wiring rather than a stub response.",
                 "produces": [
-                    "text/plain"
+                    "application/json"
                 ],
                 "tags": [
                     "rest"
                 ],
-                "summary": "Get a resource",
+                "summary": "Get an item",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Item id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Getting something from database",
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/data.Item"
+                        }
+                    },
+                    "400": {
+                        "description": "missing or invalid id",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "item not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "database error",
                         "schema": {
                             "type": "string"
                         }
@@ -217,6 +296,55 @@ const docTemplate = `{
                             "type": "string"
                         }
                     }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "data.Item": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "handlers.AddRequest": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "handlers.DeleteResponse": {
+            "type": "object",
+            "properties": {
+                "deleted": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "handlers.EditRequest": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
                 }
             }
         }
