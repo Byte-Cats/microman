@@ -1,0 +1,33 @@
+# microman
+
+> A minimal Go HTTP API starter kit built without a web framework — just `net/http`, `gorilla/mux` for routing, and `urfave/negroni` for middleware. It's a scaffold/example project, not a production service.
+
+Module path: `github.com/byte-cats/microman` (GitHub: `Byte-Cats/microman`, note the casing difference). Call chain: `cmd/microguy/main.go` → `app` → `server` → `handlers`, with `auth`, `data`, and `log` as supporting packages. Most REST handlers (`/get`, `/add`, `/edit`, `/delete`) are still stub responses rather than real database-backed logic, and user registration/removal under `/auth/*` return `501 Not Implemented`. JWT login and a JWT-protected route (`/auth/me`) are real and working. `go build ./...`, `go vet ./...`, and `go test ./...` currently pass clean.
+
+## Getting Started
+
+- [README](README.md): Project tagline, feature/integration checklists, and links to the Kubernetes/Docker developer docs.
+- [CLAUDE.md](CLAUDE.md): Build/vet/test commands, the full package-by-package architecture summary, and known repo-wide gotchas (stale `cmd/microbro` paths in `Dockerfile`/`deploy/build.sh`, no `Makefile` despite CI scripts assuming one, old pinned dependency versions).
+- [LICENCE](LICENCE): MIT License, Byte Cats, 2022.
+
+## Architecture
+
+- [server/README.md](server/README.md): Router setup — `InitRouter()`/`InitRoutes()` in `routing.go` is the single place every route is registered; `serving.go`'s plain `http.ServeMux` is unused dead weight.
+- [app/README.md](app/README.md): The `Api` struct (top-level container holding `Settings` and the router/mux pair), `DefaultAPIClient()`/`RunDefaultClient()`, and the env-var-driven `Settings` getter/setter/checker pattern.
+- [cmd/microguy/README.md](cmd/microguy/README.md): The binary entry point (`main.go`) and the package-level Swagger annotations it carries for `swag init`.
+- [handlers/README.md](handlers/README.md): One file per route (`home.go`, `info.go`, `redirect.go`, `docs.go`, `health.go`, plus the `add`/`get`/`edit`/`delete` CRUD stubs) and the shared `writeString` response helper.
+- [data/README.md](data/README.md): The database layer — `connection.go` opens MySQL via [`byte-cats/datastation`](https://github.com/byte-cats/datastation), `json.go` has the one real helper (`JsonConvert`), `data.go` is still a placeholder.
+- [log/README.md](log/README.md): The custom `log.Log` line logger (writes JSON lines to `logging.json`), distinct from the stdlib `log` package used directly in some handlers.
+- [docs/README.md](docs/README.md): Swagger/OpenAPI setup — `RegisterSwaggerRoute` mounts the UI at `/swagger/`; `docs.go`/`swagger.json`/`swagger.yaml` are generated output from `swag init`, not hand-edited.
+
+## Authentication
+
+- [auth/auth.md](auth/auth.md): The `auth` package — JWT issuing/verification (`jwt.go`, `golang-jwt/jwt/v5`), the negroni-based `JWTMiddleware` (`middleware.go`), bcrypt password hashing (`password.go`), input validation rules (`rules.go`), and `route.go`'s `AuthRoute`, which mounts `POST /auth/login` (public), `GET /auth/me` (JWT-protected, echoes verified claims), and the honest `501` stubs `POST /auth/user/new` / `POST /auth/user/remove`.
+
+## Deployment & CI
+
+- [docs/developer/docker.md](docs/developer/docker.md): Cloning, configuring env files under `deploy/`, and building the Docker Compose setup.
+- [docs/developer/kubernetes.md](docs/developer/kubernetes.md): Applying, updating, scaling, and deleting the manifests under `deploy/k8`.
+- [docs/developer/Travis-CI.md](docs/developer/Travis-CI.md): Linking the repo to Travis CI and enabling build-on-push/PR.
+
+Not linked above: `docs/developer/info.md` and `docs/developer/references.md` are informal, joke-y prose from the project's original developer (the latter is a single line — "OOGGAAA BOGGAAAA") and `info.md` describes package names (`applogic`, `appdata`) that no longer exist in the current tree (`app/`, `data/`); neither is a reliable technical reference, so they're intentionally omitted here.
