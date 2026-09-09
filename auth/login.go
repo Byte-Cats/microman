@@ -6,7 +6,10 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func loginHandler(w http.ResponseWriter, r *http.Request) {
+// LoginHandler validates the submitted username/password against the stored
+// user record and, on success, writes back a signed JWT for the caller to
+// use as their bearer token on subsequent requests.
+func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("username")
 	password := r.FormValue("password")
 

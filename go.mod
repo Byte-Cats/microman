@@ -11,6 +11,7 @@ require (
 	github.com/byte-cats/datastation v0.0.0-20221216201318-d63fd55bcbd4
 	github.com/golang-jwt/jwt/v5 v5.3.1
 	github.com/json-iterator/go v1.1.12
+	github.com/urfave/negroni v1.0.0
 )
 
 require (
