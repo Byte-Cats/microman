@@ -1,0 +1,488 @@
+# microman
+
+> A minimal Go HTTP API starter kit built without a web framework — just `net/http`, `gorilla/mux` for routing, and `urfave/negroni` for middleware. It's a scaffold/example project, not a production service.
+
+Module path: `github.com/byte-cats/microman` (GitHub: `Byte-Cats/microman`, note the casing difference). Call chain: `cmd/microguy/main.go` → `app` → `server` → `handlers`, with `auth`, `data`, and `log` as supporting packages. Most REST handlers (`/get`, `/add`, `/edit`, `/delete`) are still stub responses rather than real database-backed logic, and user registration/removal under `/auth/*` return `501 Not Implemented`. JWT login and a JWT-protected route (`/auth/me`) are real and working. `go build ./...`, `go vet ./...`, and `go test ./...` currently pass clean.
+
+This file inlines the full text of every document linked from `llms.txt`, concatenated in the same reading order, so an agent can load one file and have everything.
+
+## Getting Started
+
+### README.md
+
+<div align="center";>
+
+# microman
+
+[![CodeQL](https://github.com/Byte-Cats/microman/actions/workflows/codeql.yml/badge.svg)](https://github.com/Byte-Cats/microman/actions/workflows/codeql.yml)
+[![Go](https://github.com/Byte-Cats/microman/actions/workflows/go.yml/badge.svg)](https://github.com/Byte-Cats/microman/actions/workflows/go.yml)
+[![Go Reference](https://pkg.go.dev/badge/github.com/byte-cats/microman#section-readme.svg)](https://pkg.go.dev/github.com/byte-cats/microman#section-readme)
+[![Go Report Card](https://goreportcard.com/badge/github.com/byte-cats/microman)](https://goreportcard.com/report/github.com/byte-cats/microman)
+
+
+![robot-1665173775955-3483](https://user-images.githubusercontent.com/55233091/194646103-6c33ee05-913c-4dba-9ee6-257ff4383d9b.jpg)
+
+
+## Minimal Go Api Starter Kit without frameworks
+
+
+### Stats
+
+
+![Metrics](https://raw.githubusercontent.com/Byte-Cats/microman/main/github-metrics.svg)
+
+</div>
+
+Table of contents
+=================
+
+<!--ts-->
+   * [About](#about)
+   * [Features](#features)
+   * [Integration](#integration)
+   * [Kubernetes](docs/developer/kubernetes.md)
+   * [Docker](docs/developer/docker.md)
+
+<!--te-->
+
+## About
+- Using production experience and general principals in order to create the perfect microservice setup
+- Uses [datastation](https://github.com/byte-cats/datastation) which is a library we made to let the user choose and configure a database quickly
+
+
+### Features
+- [x] Api Object
+- [x] Basic Settings
+- [x] Simple FS
+- [x] Heavily Commentated
+- [x] Example Routes
+- [x] Sub-routing
+- [x] Logging System
+- [x] Redirect
+- [x] JWT Ready
+- [ ] Auto Generated Api Docs
+- [ ] Example Database Use
+- [ ] Test Automation
+- [x] Users
+- [ ] Authentication
+- [x] Poggy Build Scripts
+- [x] Sexier Documentation (More readme's EVERYWHERE???)
+
+### Integration
+- [x] Github Actions
+- [x] Docker
+- [x] Kubernetes
+- [x] Jenkins
+- [x] Travis.ci
+
+### CLAUDE.md
+
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## What this is
+
+`microman` (module `github.com/byte-cats/microman`) is a minimal Go HTTP API starter kit built without a web framework — just `net/http`, `gorilla/mux` for routing, and `urfave/negroni` for middleware. It's a scaffold/example project ("Minimal Go Api Starter Kit"), not a production service — expect unfinished stubs and placeholder handlers throughout.
+
+## Commands
+
+- Build the actual entrypoint (matches what CI runs): `go build ./cmd/microguy/main.go`
+- Build everything: `go build ./...`
+- Vet: `go vet ./...`
+- Format check: `gofmt -l .` (exclude `vendor/`)
+- Tidy modules: `go mod tidy`
+- There is a `vendor/` directory — if it's still present, keep it in sync with `go mod vendor` after any dependency change, since Go will build with `-mod=vendor` automatically whenever `vendor/modules.txt` exists.
+- No `_test.go` files exist yet (this is open issue #26 — "test driven go development"). Once tests exist, run a single one with `go test ./<package> -run TestName -v`.
+- There is no Makefile, despite `Jenkinsfile` invoking `make unit-tests` / `make functional-tests` and `deploy/build.sh` assuming a `make`-based flow — those CI/build scripts are stale relative to the actual repo layout. Don't assume they work as-is.
+- `deploy/build.sh` and the `Dockerfile` both build from `cmd/microbro/`, but the real (only) command package is `cmd/microguy/` — another stale-path leftover from a rename. Follow `.github/workflows/go.yml` (which builds `cmd/microguy`) as the source of truth for what actually builds.
+
+## Architecture
+
+Call chain: `cmd/microguy/main.go` → `app` package → `server` package → `handlers` package, with `auth`, `data`, and `log` as supporting packages.
+
+- **`app/`** — `Api` struct is the top-level container: holds `Settings` (title/hostname/port/version, populated from env vars with defaults via `app.CheckSettings`) and `server.Served` (the router + a raw `http.ServeMux`, unused). `app.DefaultAPIClient()` builds the default instance; `app.RunDefaultClient()` calls `http.ListenAndServe`. Getter/setter functions here (`GetTitle`, `SetPort`, etc.) are the pattern used throughout instead of exported struct fields being accessed directly.
+- **`server/`** — `InitRouter()` creates the `*mux.Router`; `InitRoutes()` registers every endpoint path to its handler in one place (this is the map of the whole API surface — check it first to see what routes exist). `serving.go`'s `Served`/`ServSetup` (a plain `http.ServeMux`) is currently dead weight, not wired into actual request handling.
+- **`handlers/`** — one file per route/verb (`add.go`, `get.go`, `edit.go`, `delete.go`, `home.go`, `info.go`, `redirect.go`, `docs.go`, `auth.go`). Most are still stub handlers that just write a fixed string; `auth.go` is an empty placeholder (comment-only) despite `/auth/login`, `/auth/user/new`, `/auth/user/remove` already being routed to `handlers.Get` in `server/routing.go`.
+- **`auth/`** — self-contained package for credential rules (`rules.go`), JWT issuing/verification (`jwt.go`), AES encrypt/decrypt (`crypto.go`), DB access (`database.go`, MySQL via `database/sql`), secrets loaded from env (`secrets.go`), and a `User` model (`users.go`). Several functions across `login.go`/`jwt.go`/`users.go` call helpers that are declared but never defined elsewhere in the package (e.g. `getUserFromDBByUsername`, `comparePasswordHash`, `validateInput`, `ValidateUserCredentials`, `generateJWTToken`) — this package does not fully compile/link end-to-end as written; check what actually exists before assuming a function is callable.
+- **`data/`** — meant to hold the database layer; currently near-empty placeholders (`connection.go`, `data.go` are just package comments). `json.go` has the one real helper, `JsonConvert`, wrapping `encoding/json`. The README says the project is meant to integrate a separate library, [`byte-cats/datastation`](https://github.com/byte-cats/datastation), here — that integration hasn't happened yet (see issue #17).
+- **`log/`** — custom logger (`log.Log`), unrelated to the stdlib `log` package also used directly in a few handlers (some files import both under an alias, e.g. `log2`).
+- **`docs/`** — intended location for Swagger/OpenAPI generation; `swag.go` and `swag.yaml` are currently placeholders (issue #37).
+
+## Known repo-wide gotchas
+
+- Module path is lowercase (`github.com/byte-cats/microman`) while the GitHub org/repo is `Byte-Cats/microman` — this matters for import paths vs. browser URLs.
+- Several packages (`auth`, `cmd/microguy`) reference undefined identifiers or wrong import aliases and don't currently build cleanly — don't assume `go build ./...` succeeds without checking first.
+- go.mod dependencies were pinned to very old versions (jwt-go from a since-archived fork, x/crypto from 2019); if you're touching `auth/` or dependency versions, check `go.mod` for what's currently pinned rather than assuming recent versions.
+
+> Note: as of the current `main` branch (post-modernization), `go build ./...`, `go vet ./...`, and `go test ./...` all pass clean, and `auth/` compiles and works end-to-end (see the Authentication section below) — some of the gotchas above describe an earlier state of the repo and are kept here verbatim as the file exists on disk.
+
+### LICENCE
+
+MIT License
+
+Copyright (c) 2022 Byte Cats
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+## Architecture
+
+### server/README.md
+
+# server
+
+Router setup. `routing.go`'s `InitRouter()` builds the `*mux.Router` (gorilla/mux, `StrictSlash(true)`), and `InitRoutes()` is the single place every route in the app gets registered — general endpoints straight to `handlers.*`, the Swagger UI via `docs.RegisterSwaggerRoute`, and all `/auth/*` routes via `auth.AuthRoute`. Check this file first to see the full API surface. `serving.go`'s `Served`/`ServSetup` (a bare `http.ServeMux`) is currently unused dead weight — not wired into actual request handling.
+
+## Byte Thoughts:
+
+### Notes from Cloud Team
+some notes
+
+### Notes from Backend Team
+more notes
+
+### Notes from Dev Ops
+technical thinking thoughts be bussin
+```
+
+### app/README.md
+
+# app
+
+Top-level container for the running API instance. `app.go` defines the `Api` struct (holds `Settings` plus the `server.Served` router/mux pair), `DefaultAPIClient()` to build one with env-derived settings, and `RunDefaultClient()` to actually call `http.ListenAndServe`. `settings.go` holds `Settings` (title, hostname, port, version) and the `Check*`/`Get*`/`Set*`/`Show*` getter-setter functions used to populate it from environment variables with hardcoded defaults as fallback.
+
+## Byte Thoughts:
+
+### Notes from Cloud Team
+some notes
+
+### Notes from Backend Team
+more notes
+
+### Notes from Dev Ops
+technical thinking thoughts be bussin
+```
+
+### cmd/microguy/README.md
+
+# cmd/microguy
+
+The binary's entry point. `main.go` builds the default `app.Api` via `app.DefaultAPIClient()`, logs its title, and calls `app.RunDefaultClient()` to start serving. It also carries the package-level Swagger/OpenAPI annotations (`@title`, `@version`, `@host`, etc.) that `swag init` reads to generate the docs in `docs/`.
+
+## Byte Thoughts:
+
+### Notes from Cloud Team
+some notes
+
+### Notes from Backend Team
+more notes
+
+### Notes from Dev Ops
+technical thinking thoughts be bussin
+```
+
+### handlers/README.md
+
+# handlers
+
+One file per route: `home.go`, `info.go`, `redirect.go`, `docs.go`, `health.go` (general endpoints), and `add.go`/`get.go`/`edit.go`/`delete.go` (CRUD stubs — mostly still placeholder responses, not real database-backed logic). `respond.go` holds `writeString`, a small shared helper used by every handler here to write a response body and swallow the write error consistently, instead of each handler repeating that boilerplate. Each handler also carries `swaggo`-style doc comments (`@Summary`, `@Router`, ...) that feed the generated docs in `docs/`. Auth-specific routes live in the `auth` package instead (see `auth.AuthRoute`), not here.
+
+## Byte Thoughts:
+
+### Notes from Cloud Team
+some notes
+
+### Notes from Backend Team
+more notes
+
+### Notes from Dev Ops
+technical thinking thoughts be bussin
+```
+
+### data/README.md
+
+# data
+
+The database/data layer. `connection.go` opens (and closes) the app's MySQL connection through [`byte-cats/datastation`](https://github.com/byte-cats/datastation) — `Connect()` reads `DATABASE_TYPE`/`DATABASE_HOST`/`DATABASE_PORT`/`DATABASE_NAME`/`DATABASE_USER`/`DATABASE_PASSWORD` env vars via datastation's config helpers and returns a ready `*sql.DB`. `json.go` has `JsonConvert`, a `jsoniter`-backed (drop-in `encoding/json` replacement, for speed) marshal helper used by a couple of handlers. `data.go` is currently just a placeholder for future data structures.
+
+## Byte Thoughts:
+
+### Notes from Cloud Team
+some notes
+
+### Notes from Backend Team
+more notes
+
+### Notes from Dev Ops
+technical thinking thoughts be bussin
+```
+
+### log/README.md
+
+# log
+
+A tiny custom logger, distinct from the standard library's `log` package (which several handlers also import directly, sometimes in the same file under an alias). `logging.go`'s `Log(format string, v ...any)` marshals the format string to JSON and appends it as a line to `logging.json` in this directory. Note it currently only serializes the format string itself, not the variadic args — so it's closer to a fixed-message line logger than a real `fmt.Sprintf`-style logger today.
+
+## Byte Thoughts:
+
+### Notes from Cloud Team
+some notes
+
+### Notes from Backend Team
+more notes
+
+### Notes from Dev Ops
+technical thinking thoughts be bussin
+```
+
+### docs/README.md
+
+# docs
+
+Swagger/OpenAPI documentation for the API, generated by [`swaggo/swag`](https://github.com/swaggo/swag). `swag.go` exposes `RegisterSwaggerRoute(router)`, which mounts the interactive Swagger UI at `/swagger/`. `docs.go`, `swagger.json`, and `swagger.yaml` are all generated output (`swag init`, run from the repo root) built from the `@...` doc comments on the handler functions in `handlers/` and the package-level API metadata in `cmd/microguy/main.go` — don't hand-edit them, regenerate instead. `developer/` holds separate, hand-written developer docs (Kubernetes, Docker, Travis CI, etc.) unrelated to the generated API spec.
+
+## Byte Thoughts:
+
+### Notes from Cloud Team
+some notes
+
+### Notes from Backend Team
+more notes
+
+### Notes from Dev Ops
+technical thinking thoughts be bussin
+```
+
+## Authentication
+
+### auth/auth.md
+
+# auth
+
+Owns all authentication/authorization logic; `handlers`/`server` just mount it (`auth.AuthRoute`) rather than re-implementing anything.
+
+- `constants.go` — shared error-message strings.
+- `secrets.go` — `FindSecret` reads the signing secret (and its expiration) from env vars.
+- `crypto.go` — AES-GCM `Encrypt`/`Decrypt` helpers, keyed off the secret above.
+- `rules.go` — `UserCredentialRules`/`validateUserInput` and friends: username/password shape validation.
+- `users.go` — the `User` model and `FindUserByUsername`.
+- `database.go` — `ConnectDB`/`CloseDB`, a raw MySQL `database/sql` connection (separate from `data.Connect`, which goes through datastation).
+- `jwt.go` — `generateJWT`/`VerifyToken`, built on `golang-jwt/jwt/v5`.
+- `middleware.go` — `JWTMiddleware`, a negroni-based `http.Handler` wrapper that verifies the bearer token via `VerifyToken` and either lets the request through (claims attached to the request context, retrievable via `ClaimsFromContext`) or returns 401.
+- `login.go` — `LoginHandler`: validates credentials, checks the password hash, and issues a JWT on success.
+- `password.go` — `hashAndSaltPassword`, the bcrypt hashing helper.
+- `route.go` — `AuthRoute(router *mux.Router)`, the single entry point that mounts every `/auth/*` route: `POST /auth/login` (public), `GET /auth/me` (JWT-protected, echoes verified claims — the live demonstration that the middleware actually gates a route), and `POST /auth/user/new` / `POST /auth/user/remove` (honest `501 Not Implemented` stubs, since there's no backing create/remove-user logic yet).
+
+## Byte Thoughts:
+
+### Notes from Cloud Team
+some notes
+
+### Notes from Backend Team
+more notes
+
+### Notes from Dev Ops
+technical thinking thoughts be bussin
+```
+
+## Deployment & CI
+
+### docs/developer/docker.md
+
+# Running Microman in Docker
+
+## Prerequisites
+
+To install Microman via Docker, first ensure you have both docker and docker-compose installed.
+See their [documentation](https://docs.docker.com/compose/install/) for information.
+
+
+## Clone the Microman Repository
+Create a directory collate your cloned repositories. Move into the directory then, clone the repository.
+
+```bash
+$ git clone https://github.com/ByteCats/Microman
+```
+
+Once the repository has been cloned, cd into the Microman directory that the clone creates.
+
+```bash
+$ cd Microman/
+```
+
+If you have cloned the repository previously, update it prior to installing/re-installing using Docker
+
+```bash
+$ git pull
+```
+
+## Configuring the software
+
+Edit the env files located in `Microman/deploy/`
+
+
+## Build the container
+
+*Note: some of these steps take >>1hr to complete depending on the speed of your internet connection*
+
+- Pull images
+
+```bash
+$ docker-compose pull
+```
+
+- Create a directory for sharing resources between your computer and the container
+```bash
+$ mkdir ~/Microman_data
+$ mkdir ~/Microman_data/share
+```
+*i.e.* a directory called `Microman_data/share` in your `home` directory
+
+- Build
+
+```bash
+$ docker-compose build --no-cache
+```
+
+- Complete build
+    - The first time you do this, it will complete the build process, for example, populating the required the databases
+    - The build takes a while because the  vv databases are large. However, this is a significant improvement on previou
+    s versions. Build time is ~30 minutes (depending on the speed of you computer and internet connection)
+    - The build has completed when you see the message ***"naming to docker.io/library Microman_restvv"***
+
+### docs/developer/kubernetes.md
+
+### Kubernetes Usage for your API
+
+Micro-man has some kubernetes manifests that you can use to deploy your API to a kubernetes cluster.
+
+You can find them in the `deploy/k8` directory.
+
+### Deploying to Kubernetes
+
+To deploy your API to kubernetes, you will need to have a kubernetes cluster running.
+
+You can use minikube for local development.
+
+Once you have a cluster running, you can deploy your API by running the following command:
+
+```bash
+kubectl apply -f deploy/k8
+```
+
+### Updating your API
+
+To update your API, you will need to manually build a new docker image and bump the version in the `deploy/k8/deployment.yaml` file.
+
+Once you have done that, you can run the following command to update your API:
+
+```bash
+kubectl apply -f deploy/k8
+```
+
+### Deleting your API
+
+To delete your API, you can run the following command:
+
+```bash
+kubectl delete -f deploy/k8
+```
+
+### Troubleshooting
+
+If you are having issues with your API, you can run the following command to get the logs:
+
+```bash
+kubectl logs -f -l app=api
+```
+
+### Scaling your API
+
+To scale your API, you can run the following command:
+
+```bash
+kubectl scale deployment api --replicas=3
+```
+
+This will scale your API to 3 replicas.
+
+### Deploying to AWS
+
+To deploy your API to AWS, you will need to have an AWS account and the AWS CLI installed.
+
+You will also need to have a kubernetes cluster running in AWS.
+
+You can use EKS for this.
+
+... To be continued ...
+
+
+## Byte Thoughts:
+
+### Notes from Cloud Team
+
+
+### Notes from Backend Team
+
+
+### Notes from Dev Ops
+technical thinking thoughts be bussin
+
+### docs/developer/Travis-CI.md
+
+# Running Travis.CI pipeline for Microman
+
+## Prerequisites
+
+To get the pipeplie up and running, you have to make sure you have a [Travis.CI account](https://www.travis-ci.com/), then you'll need to link it with your GitHub account.
+
+## Clone the Microman Repository
+Create a directory collate your cloned repositories. Move into the directory then, clone the repository.
+
+```bash
+$ git clone https://github.com/ByteCats/Microman
+```
+
+Once the repository has been cloned, cd into the Microman directory that the clone creates.
+
+```bash
+$ cd Microman/
+```
+
+If you have cloned the repository previously, update it prior to installing/re-installing using Docker
+
+```bash
+$ git pull
+```
+
+## Add Repository in Travis.CI
+
+Access your Travis.Ci account and select the cloned repository on the left and head over to the settings
+
+![image](https://user-images.githubusercontent.com/55233091/197644247-b09d2d1c-fd2e-4435-b77a-200e314c7ced.png)
+
+Make sure you enable both ``` Build pushes ``` and ``` Build pull requests ```
+
+<br>
+
+Your project is now building automaticly on every push and pull request you issue on GitHub!
+
+---
+
+Not inlined here: `docs/developer/info.md` and `docs/developer/references.md` are informal, joke-y prose from the project's original developer (the latter is a single line — "OOGGAAA BOGGAAAA") and `info.md` describes package names (`applogic`, `appdata`) that no longer exist in the current tree (`app/`, `data/`); neither is a reliable technical reference, so they're intentionally left out of this index (see `llms.txt`).
