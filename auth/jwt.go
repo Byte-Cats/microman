@@ -14,7 +14,7 @@ const ExpirationTime = 72
 var jwtSigningMethod = jwt.SigningMethodHS256
 
 func generateJWT(userID int32) (token string, err error) {
-	secret, err := FindSecret("SECRET", "", "", "")
+	secret, err := FindSecret("SECRET", "SECRET_EXPIRATION", "", "1h")
 	if err != nil {
 		return "", err
 	}
@@ -34,7 +34,7 @@ type Claims struct {
 // VerifyToken takes in a JWT token and verifies it using the secret key.
 // It returns the claims contained in the token if the token is valid, or an error if the token is invalid or has expired.
 func VerifyToken(tokenString string) (*Claims, error) {
-	secret, err := FindSecret("SECRET", "", "", "")
+	secret, err := FindSecret("SECRET", "SECRET_EXPIRATION", "", "1h")
 	if err != nil {
 		return nil, err
 	}
