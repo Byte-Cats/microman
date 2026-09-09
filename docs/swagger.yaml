@@ -1,0 +1,161 @@
+basePath: /
+host: localhost:6969
+info:
+  contact:
+    name: Byte Cats
+    url: https://github.com/Byte-Cats/microman
+  description: Minimal Go HTTP API starter kit (no web framework) built on net/http
+    and gorilla/mux. Most routes are still stub handlers; see the /docs endpoint and
+    each handler's doc comment for the actual current behavior.
+  license:
+    name: MIT
+    url: https://github.com/Byte-Cats/microman/blob/main/LICENCE
+  termsOfService: http://swagger.io/terms/
+  title: Microman API
+  version: 0.420.69
+paths:
+  /:
+    get:
+      description: Redirects the client from the root path to /docs with a 303 See
+        Other.
+      responses:
+        "303":
+          description: redirect to /docs
+          schema:
+            type: string
+      summary: Redirect to docs
+      tags:
+      - general
+  /add:
+    post:
+      description: Stub handler that is meant to add something to the database; currently
+        builds a placeholder struct, JSON-encodes it via data.JsonConvert, and writes
+        it back. The route is registered without a method restriction, so it currently
+        responds to any HTTP method.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: placeholder JSON payload
+          schema:
+            type: object
+      summary: Add a resource
+      tags:
+      - rest
+  /auth/login:
+    get:
+      description: Stub handler that is meant to fetch something from the database
+        based on the request; currently just writes a fixed string. Also currently
+        reused (as-is) for /auth/login, /auth/user/new and /auth/user/remove.
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Getting something from database
+          schema:
+            type: string
+      summary: Get a resource
+      tags:
+      - rest
+  /auth/user/new:
+    get:
+      description: Stub handler that is meant to fetch something from the database
+        based on the request; currently just writes a fixed string. Also currently
+        reused (as-is) for /auth/login, /auth/user/new and /auth/user/remove.
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Getting something from database
+          schema:
+            type: string
+      summary: Get a resource
+      tags:
+      - rest
+  /delete:
+    delete:
+      description: Stub handler that is meant to delete something from the database;
+        currently just writes a fixed string. The route is registered without a method
+        restriction, so it currently responds to any HTTP method.
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Something is going to be deleted
+          schema:
+            type: string
+      summary: Delete a resource
+      tags:
+      - rest
+  /docs:
+    get:
+      description: Writes a fixed "Docs" string. Real interactive API docs are served
+        separately by the Swagger UI mounted at /swagger/.
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Docs
+          schema:
+            type: string
+      summary: Docs placeholder
+      tags:
+      - general
+  /edit:
+    put:
+      description: Stub handler that is meant to edit something in the database; currently
+        just writes a fixed string. The route is registered without a method restriction,
+        so it currently responds to any HTTP method.
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Something is going to be edited
+          schema:
+            type: string
+      summary: Edit a resource
+      tags:
+      - rest
+  /get:
+    get:
+      description: Stub handler that is meant to fetch something from the database
+        based on the request; currently just writes a fixed string. Also currently
+        reused (as-is) for /auth/login, /auth/user/new and /auth/user/remove.
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Getting something from database
+          schema:
+            type: string
+      summary: Get a resource
+      tags:
+      - rest
+  /home:
+    get:
+      description: Writes a fixed welcome message for the microman API and logs the
+        request.
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: welcome message
+          schema:
+            type: string
+      summary: Home page
+      tags:
+      - general
+  /info:
+    get:
+      description: Writes a fixed informational string describing this endpoint.
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: info string
+          schema:
+            type: string
+      summary: Info page
+      tags:
+      - general
+swagger: "2.0"

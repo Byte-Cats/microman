@@ -129,3 +129,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+# Claude Code agent worktrees
+.claude/worktrees/
+

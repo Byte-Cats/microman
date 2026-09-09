@@ -1,10 +1,12 @@
 package data
 
 import (
-	"encoding/json"
+	jsoniter "github.com/json-iterator/go"
 
 	"github.com/byte-cats/microman/log"
 )
+
+var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 func JsonConvert(value interface{}) (string, error) {
 	content, err := json.Marshal(value)

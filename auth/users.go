@@ -3,30 +3,15 @@ package auth
 import (
 	"database/sql"
 	"errors"
-	"fmt"
 	"strings"
-
-	"golang.org/x/crypto/bcrypt"
-)
-
-package auth
-
-import (
-"database/sql"
-"errors"
-"fmt"
-"time"
-
-"github.com/dgrijalva/jwt-go"
-"golang.org/x/crypto/bcrypt"
 )
 
 // User represents a user in the system.
 type User struct {
-	ID       int    json:"id"
-	Username string json:"username"
-	Password string json:"password"
-	Rules *CredentialRules
+	ID       int    `json:"id"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Rules    *CredentialRules
 }
 
 // ValidateCredentials checks if the provided username and password meet the requirements specified in the user's credential rules.
@@ -58,8 +43,6 @@ func ValidateCredentials(username string, password string, rules *CredentialRule
 	}
 	return nil
 }
-
-
 
 // FindUserByUsername looks for a user in the database with the given username and returns it.
 // It returns an error if the user could not be found or if there was a problem with the database query.

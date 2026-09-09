@@ -1,53 +1,27 @@
-i'm trying to split up the big auth file into smaller files starting with users.go
+# auth
 
-can you help me extract a reasonable user.go from using all the relevant functions?
+Owns all authentication/authorization logic; `handlers`/`server` just mount it (`auth.AuthRoute`) rather than re-implementing anything.
 
-assume there is a constants.go and rules.go and database.go and jwt.go and password.go and secrets.go and crypto.go and login.go
+- `constants.go` — shared error-message strings.
+- `secrets.go` — `FindSecret` reads the signing secret (and its expiration) from env vars.
+- `crypto.go` — AES-GCM `Encrypt`/`Decrypt` helpers, keyed off the secret above.
+- `rules.go` — `UserCredentialRules`/`validateUserInput` and friends: username/password shape validation.
+- `users.go` — the `User` model and `FindUserByUsername`.
+- `database.go` — `ConnectDB`/`CloseDB`, a raw MySQL `database/sql` connection (separate from `data.Connect`, which goes through datastation).
+- `jwt.go` — `generateJWT`/`VerifyToken`, built on `golang-jwt/jwt/v5`.
+- `middleware.go` — `JWTMiddleware`, a negroni-based `http.Handler` wrapper that verifies the bearer token via `VerifyToken` and either lets the request through (claims attached to the request context, retrievable via `ClaimsFromContext`) or returns 401.
+- `login.go` — `LoginHandler`: validates credentials, checks the password hash, and issues a JWT on success.
+- `password.go` — `hashAndSaltPassword`, the bcrypt hashing helper.
+- `route.go` — `AuthRoute(router *mux.Router)`, the single entry point that mounts every `/auth/*` route: `POST /auth/login` (public), `GET /auth/me` (JWT-protected, echoes verified claims — the live demonstration that the middleware actually gates a route), and `POST /auth/user/new` / `POST /auth/user/remove` (honest `501 Not Implemented` stubs, since there's no backing create/remove-user logic yet).
 
+## Byte Thoughts:
 
+### Notes from Cloud Team
+some notes 
 
-# Auth System
+### Notes from Backend Team
+more notes
 
-The "auth" package is a comprehensive and futuristic solution for handling user authentication in your application. It includes features such as configurable password rules, secure storage of secrets, and generation of JWT tokens for authorized user access. With its ability to connect to a database and seamlessly integrate with popular libraries like Negroni and Gorilla Mux, this package is the perfect choice for ensuring secure and hassle-free user authentication in your project.
-
-This auth system is designed to provide secure user registration and login functionality, using bcrypt to hash and salt passwords and JWT tokens to authenticate users. It also includes validation checks to ensure that user input meets certain criteria, and a database connection to store and retrieve user records. With this system in place, you can confidently manage user access to your application and keep your users' data safe and secure.
-
-### Features
-- User registration: The `handleCreateUser` function processes requests to create new users, by validating the provided username and password, checking to see if the username is already in use, hashing and salting the password, and creating a new user record in the database.
-- User login: The `handleUserLogin` function processes login requests, by validating the provided username and password and retrieving the corresponding user record from the database. If the login is successful, it generates a JWT token for the user.
-- Password hashing and salting: The `hashAndSaltPassword` function hashes and salts the given password using bcrypt.
-- JWT token generation: The `generateJWT` function generates a JWT token for the given user ID,
-
-# Jwt Middleware
-This package provides functionality for securing HTTP endpoints with JSON Web Tokens (JWTs) in a Go web application. It uses the jwt-go and go-jwt-middleware libraries to handle JWT validation and signing.
-
-To use this package, you will need to set a SECRET environment variable with a hex-encoded secret key. This secret key will be used to sign and validate JWTs.
-
-You can then use the InitMiddleware function to initialize a jwtMiddleware.JWTMiddleware instance with the secret key. This middleware can be used to secure an HTTP endpoint by passing it to the SecureEndpoint function along with the endpoint's path, a handler function, and a mux.Router instance.
-
-For example:
-
-```go
-secret := auth.FindSecret()
-middleware := auth.InitMiddleware(secret)
-
-router := mux.NewRouter()
-auth.SecureEndpoint("/secure", middleware, secureHandler, router)
+### Notes from Dev Ops
+technical thinking thoughts be bussin
 ```
-
-This will secure the /secure endpoint with the initialized middleware. When a request is made to this endpoint, the middleware will check for a valid JWT in the request header and call the secureHandler function if the JWT is valid. If the JWT is invalid or not present, the middleware will return an error to the client.
-
-You can also use the InitMiddleware function to customize the JWT validation and signing options. For example, you can specify a different method for extracting the JWT from the request (e.g. from a cookie or query parameter) by passing a custom Extractor function to the Options struct.
-
-For more information on the jwt-go and go-jwt-middleware libraries, you can refer to their respective documentation.
-
-
-
-## Auth Process Codex
-
-1. Get the master secret key.
-2. Make a new AES cipher block.
-3. Make a new GCM cipher block which returns an AEAD object.
-4. Verify the encrypted key's length.
-5. Finally, "Open" the encrypted key by passing in `nil` for the destination, then the nonce which was prepended in the final key, then the actual encrypted key bytes (the latter part), and `nil` for extra data.
-
